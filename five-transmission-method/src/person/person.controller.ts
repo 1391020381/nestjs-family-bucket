@@ -6,18 +6,36 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { AnyFilesInterceptor } from '@nestjs/platform-express';
 
-@Controller('person')
+@Controller('api/person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
 
+  @Post('file')
+  @UseInterceptors(
+    AnyFilesInterceptor({
+      dest: 'uploads/',
+    }),
+  )
+  body2(
+    @Body() createPersonDto: CreatePersonDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
+    console.log(createPersonDto, 'xxxxx', files);
+    return `received: ${JSON.stringify(createPersonDto)}`;
+  }
   @Post()
   create(@Body() createPersonDto: CreatePersonDto) {
-    return this.personService.create(createPersonDto);
+    // return this.personService.create(createPersonDto);
+    return `received: ${JSON.stringify(createPersonDto)}`;
   }
 
   @Get()
@@ -25,9 +43,13 @@ export class PersonController {
     return this.personService.findAll();
   }
 
+  @Get('find')
+  query(@Query('name') name: string, @Query('age') age: number) {
+    return `received: name=${name},age=${age}`;
+  }
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.personService.findOne(+id);
+  urParm(@Param('id') id: string) {
+    return `received: id=${id}`;
   }
 
   @Patch(':id')
