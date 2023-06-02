@@ -1,0 +1,2 @@
+- In Nest, thanks to TypeScript capabilities, it's extremely easy to manage dependencies because they are resolved just by type. In the example below, Nest will resolve the catsService by creating and returning an instance of CatsService
+- constructor(private catsService: CatsService) {}
