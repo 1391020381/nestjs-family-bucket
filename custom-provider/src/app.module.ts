@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
@@ -39,6 +39,16 @@ import { CatsModule } from './cats/cats.module';
           desc: 'cccc',
         };
       },
+    },
+    {
+      provide: 'person3',
+      useFactory(person: { name: string }, appService: AppService) {
+        return {
+          name: person.name,
+          desc: appService.getHello(),
+        };
+      },
+      inject: ['person', AppService],
     },
   ],
 })
