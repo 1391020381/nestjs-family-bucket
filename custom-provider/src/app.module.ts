@@ -15,7 +15,7 @@ import { CatsModule } from './cats/cats.module';
     {
       provide: 'person',
       useValue: {
-        name: 'aaaa',
+        name: 'aaaa person3',
         age: 20,
       },
     },
@@ -35,8 +35,8 @@ import { CatsModule } from './cats/cats.module';
           setTimeout(resolve, 3000);
         });
         return {
-          name: 'bbb',
-          desc: 'cccc',
+          name: 'bbb-person5',
+          desc: 'cccc-person5',
         };
       },
     },
@@ -48,7 +48,14 @@ import { CatsModule } from './cats/cats.module';
           desc: appService.getHello(),
         };
       },
+      // 通过 inject 申明了两个 token 一个是字符串 token 的 person 一个 是 class  token 的 AppService
+      // 在 调用 useFactory方法的时候 Nest就会注入这两个对象。
+      // 其实就是上面 provide 的 person 修改值 可以发现联动
       inject: ['person', AppService],
+    },
+    {
+      provide: 'person4',
+      useExisting: 'person2',
     },
   ],
 })
