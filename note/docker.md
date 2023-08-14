@@ -40,4 +40,8 @@
 6. aaa.tar.gz 表示归档文件的名称
 7. ./aaa 表示要大包的文件或目录的路径
 
+- docker run -d -p 3306:3306 -v /User/guang/mysql-data:/var/lib/mysql --name mysql-container mysql
+
+* -e MYSQL_ROOT_PASSWORD=xxx 设置 root 用户名的密码
+
 # docker-compose
