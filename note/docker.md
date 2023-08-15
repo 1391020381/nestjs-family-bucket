@@ -45,3 +45,14 @@
 * -e MYSQL_ROOT_PASSWORD=xxx 设置 root 用户名的密码
 
 # docker-compose
+
+# Docker 容器通信的最简单方式桥接网络
+
+1. Docker Compose 中 多个 docke 容器的通信,我们是通过 指定宿主机 ip 和端口的方式。因为 mysql redis 的 Docker 容器都映射到宿主机的端口,那么 nest 的容器就可以通过 宿主机来实现和其他容器通信。
+
+2. 可以创建一个 Network Namespace 然后设置到多个 Docker 容器,这样这些容器就在一个 Namespace 下了,不就可以访问对应端口了 Docker 确实支持这种网络 叫做 桥接网络
+
+- docker network create common-network
+
+* 可以通过容器名称直接访问
+* 不过，其实不指定 networks 也可以，docker-compose 会创建个默认的。
