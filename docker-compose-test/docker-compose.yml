@@ -10,13 +10,15 @@ services:
       - '3000:3000'
   mysql-container:
     image: mysql
+    user: root
     ports:
       - '3306:3306'
     volumes:
-      - /Volumes/mysql-data:/var/lib/mysql
+      - /Users/Volumes/mysql-data:/var/lib/mysql
   redis-container:
     image: redis
+    user: root
     ports:
       - '6379:6379'
     volumes:
-      - /Volumes/aaa:/data
+      - /Users/Volumes/aaa:/data
