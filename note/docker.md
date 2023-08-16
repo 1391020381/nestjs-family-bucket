@@ -56,3 +56,5 @@
 
 * 可以通过容器名称直接访问
 * 不过，其实不指定 networks 也可以，docker-compose 会创建个默认的。
+
+* volumes 需要在 mac home /Users/zhoujin/aaa:/data

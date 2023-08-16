@@ -1,5 +1,7 @@
+version: '2.19.1'
 services:
   nest-app:
+    container_name: nest-app
     build:
       context: ./
       dockerfile: ./Dockerfile
@@ -8,17 +10,29 @@ services:
       - redis-container
     ports:
       - '3000:3000'
+    # networks:
+    #   - common-network
   mysql-container:
+    container_name: mysql-container
     image: mysql
-    user: root
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - SESSION_SECRET
     ports:
       - '3306:3306'
     volumes:
-      - /Users/Volumes/mysql-data:/var/lib/mysql
+      - /Users/zhoujin/mysql-data:/var/lib/mysql
+    # networks:
+    #   - common-network
   redis-container:
+    container_name: redis-container
     image: redis
-    user: root
     ports:
       - '6379:6379'
     volumes:
-      - /Users/Volumes/aaa:/data
+      - /Users/zhoujin/aaa:/data
+    # networks:
+    #   - common-network
+# networks:
+#   common-network:
+#     driver: bridge
