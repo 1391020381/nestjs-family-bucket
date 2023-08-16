@@ -1,7 +1,14 @@
 version: '2.19.1'
 services:
-  nest-app:
-    container_name: nest-app
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - '89:80'
+    volumes:
+      - /Users/zhoujin/Volumes/nginx:/etc/nginx
+  nest-app-1:
+    container_name: nest-app-1
     build:
       context: ./
       dockerfile: ./Dockerfile
@@ -9,7 +16,17 @@ services:
       - mysql-container
       - redis-container
     ports:
-      - '3000:3000'
+      - '3001:3000'
+  nest-app-2:
+    container_name: nest-app-2
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mysql-container
+      - redis-container
+    ports:
+      - '3002:3000'
     # networks:
     #   - common-network
   mysql-container:
@@ -21,7 +38,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - /Users/zhoujin/mysql-data:/var/lib/mysql
+      - /Users/zhoujin/Volumes/mysql-data:/var/lib/mysql
     # networks:
     #   - common-network
   redis-container:
@@ -30,7 +47,7 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - /Users/zhoujin/aaa:/data
+      - /Users/zhoujin/Volumes/aaa:/data
     # networks:
     #   - common-network
 # networks:
