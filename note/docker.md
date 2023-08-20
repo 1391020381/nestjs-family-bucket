@@ -58,3 +58,9 @@
 * 不过，其实不指定 networks 也可以，docker-compose 会创建个默认的。
 
 * volumes 需要在 mac home /Users/zhoujin/aaa:/data
+
+
+
+
+# docker mysql8 
+* docker run --name mysql8 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:8
