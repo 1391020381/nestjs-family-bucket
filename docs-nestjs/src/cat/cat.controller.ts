@@ -19,7 +19,7 @@ import { CatService } from './cat.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 
-@Controller('cat')
+@Controller('cats')
 export class CatController {
   constructor(private readonly catService: CatService) {}
 
@@ -33,8 +33,8 @@ export class CatController {
   @Header('AAAA', '1')
   @HttpCode(500)
   findAll(@Req() req: Request, @Ip() ip, @HostParam() hostParam) {
-    console.log(req.headers);
-    console.log('ip:', ip, 'hostParam:', hostParam);
+    // console.log(req.headers);
+    // console.log('ip:', ip, 'hostParam:', hostParam);
     return this.catService.findAll();
   }
   @Get('ab*cd')
