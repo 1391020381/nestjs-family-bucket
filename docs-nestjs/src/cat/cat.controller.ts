@@ -13,12 +13,15 @@ import {
   HostParam,
   HttpStatus,
   HttpCode,
+  HttpException,
+  UseFilters,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CatService } from './cat.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
-
+import { CustomException } from '../common/CustomException';
+import { CustomExceptionFilter } from '../common/CustomExceptionFilter';
 @Controller('cats')
 export class CatController {
   constructor(private readonly catService: CatService) {}
@@ -29,17 +32,33 @@ export class CatController {
   }
 
   @Get('breed')
+  @UseFilters(new CustomExceptionFilter())
   @Header('Cache-Control', 'none')
   @Header('AAAA', '1')
   @HttpCode(500)
   findAll(@Req() req: Request, @Ip() ip, @HostParam() hostParam) {
     // console.log(req.headers);
     // console.log('ip:', ip, 'hostParam:', hostParam);
-    return this.catService.findAll();
+    // return this.catService.findAll();
+    throw new CustomException('CustomException', 500);
   }
   @Get('ab*cd')
-  routeWildcards() {
-    return 'this route uses a wildcard';
+  async routeWildcards() {
+    try {
+      await Window;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom message',
+          code: '500',
+        },
+        HttpStatus.BAD_GATEWAY,
+        {
+          cause: error,
+        },
+      );
+    }
   }
   // @Get(':id')
   // findOne(@Param('id') id: string, @Res() res: Response) {
