@@ -7,8 +7,12 @@ import {
   Param,
   Delete,
   Header,
+  Req,
   Res,
+  Ip,
+  HostParam,
   HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CatService } from './cat.service';
@@ -27,15 +31,21 @@ export class CatController {
   @Get('breed')
   @Header('Cache-Control', 'none')
   @Header('AAAA', '1')
-  findAll() {
+  @HttpCode(500)
+  findAll(@Req() req: Request, @Ip() ip, @HostParam() hostParam) {
+    console.log(req.headers);
+    console.log('ip:', ip, 'hostParam:', hostParam);
     return this.catService.findAll();
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string, @Res() res: Response) {
-    // return this.catService.findOne(+id);
-    res.status(HttpStatus.BAD_GATEWAY).send(this.catService.findOne(+id));
+  @Get('ab*cd')
+  routeWildcards() {
+    return 'this route uses a wildcard';
   }
+  // @Get(':id')
+  // findOne(@Param('id') id: string, @Res() res: Response) {
+  //   // return this.catService.findOne(+id);
+  //   res.status(HttpStatus.BAD_GATEWAY).send(this.catService.findOne(+id));
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
