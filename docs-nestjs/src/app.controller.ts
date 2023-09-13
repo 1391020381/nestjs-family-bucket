@@ -18,6 +18,7 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     @Inject('app_service') private readonly appService2: AppService,
+    @Inject('person') private readonly person: any,
   ) {}
 
   @Get()
@@ -35,7 +36,7 @@ export class AppController {
   }
   @Get('hello4')
   getHello4(@Ccc() c) {
-    return c;
+    return c + '<br/>' + this.person.name + '<br/>' + this.person.age;
   }
   @Get('hello5')
   @UseGuards(DddGuard)

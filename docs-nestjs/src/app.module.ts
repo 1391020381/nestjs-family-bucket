@@ -26,6 +26,22 @@ export const mockCatsService = {
       provide: 'app_service',
       useClass: AppService,
     },
+    {
+      provide: 'person',
+      useValue: {
+        name: 'aaa',
+        age: 20,
+      },
+    },
+    {
+      provide: 'person2',
+      useFactory() {
+        return {
+          name: 'bbb',
+          desc: 'cccc',
+        };
+      },
+    },
   ],
 })
 export class AppModule implements NestModule {
