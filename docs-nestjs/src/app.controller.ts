@@ -1,12 +1,26 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, SetMetadata, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-
+import { AaaGuard } from './aaa.guard';
+import { Aaa } from './aaa.decorator';
+import { Bbb } from './bbb.decorator';
+import { Ccc } from './ccc.decorator';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  // @SetMetadata('aaa', 'admin')
+  @Aaa('admin', 'aaaaa', 'bbbbb')
+  @UseGuards(AaaGuard)
   getHello(): string {
     return this.appService.getHello();
+  }
+  @Bbb('hello3', 'admin')
+  getHello3(): string {
+    return 'Bbb装饰器';
+  }
+  @Get('hello4')
+  getHello4(@Ccc() c) {
+    return c;
   }
 }
