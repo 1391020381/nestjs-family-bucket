@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Inject,
   SetMetadata,
   UseGuards,
   UseInterceptors,
@@ -14,18 +15,23 @@ import { DddGuard } from './ddd.guard';
 import { DddInterceptor } from './ddd.interceptor';
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    @Inject('app_service') private readonly appService2: AppService,
+  ) {}
 
   @Get()
   // @SetMetadata('aaa', 'admin')
   @Aaa('admin', 'aaaaa', 'bbbbb')
   @UseGuards(AaaGuard)
   getHello(): string {
+    // return this.appService2.getHello();
     return this.appService.getHello();
   }
   @Bbb('hello3', 'admin')
   getHello3(): string {
-    return 'Bbb装饰器';
+    console.log('this.appService2:', this.appService2);
+    return this.appService2.getHello();
   }
   @Get('hello4')
   getHello4(@Ccc() c) {

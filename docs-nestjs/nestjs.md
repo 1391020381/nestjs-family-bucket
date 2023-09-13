@@ -23,3 +23,9 @@
 1. context: ExecutionContext
 
 - ExecutionContext 是 ArgumentHost 的子类 拓展了 getClass gethandler
+
+# Provider
+
+- provider 一般都是用 @Injectable 修饰的 class。
+
+* 通过 provide 指定注入的 token 通过 useClass 指定注入的对象的类,Nest 会自动对它做实例化再注入。
