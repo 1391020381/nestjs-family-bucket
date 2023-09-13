@@ -34,3 +34,7 @@
 * useClass useValue
 
 * 构造函数 注入 属性注入
+
+# Execution context
+
+1. ArgumentsHost and ExecutionContext

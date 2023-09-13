@@ -9,6 +9,7 @@ import { CustomException } from './CustomException';
 export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
+    const [req, res, next] = host.getArgs();
     const response = ctx.getResponse();
     const status = exception.getStatus();
     const message = exception.getResponse();
