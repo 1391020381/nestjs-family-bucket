@@ -4,18 +4,25 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatModule } from './cat/cat.module';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { Connection } from './connection';
+import configuration from '../config/configuration';
 export const mockCatsService = {
-  getHello2: function () {
+  getHello: function () {
     return 'mockCatsService-getHello';
   },
 };
 @Module({
-  imports: [CatModule],
+  imports: [
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+    CatModule,
+  ],
   controllers: [AppController],
   providers: [
     {

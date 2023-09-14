@@ -6,6 +6,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AppService } from './app.service';
 import { AaaGuard } from './aaa.guard';
 import { Aaa } from './aaa.decorator';
@@ -16,6 +17,7 @@ import { DddInterceptor } from './ddd.interceptor';
 @Controller()
 export class AppController {
   constructor(
+    private configService: ConfigService,
     private readonly appService: AppService,
     @Inject('app_service') private readonly appService2: AppService,
     @Inject('person') private readonly person: any,
@@ -27,6 +29,7 @@ export class AppController {
   @UseGuards(AaaGuard)
   getHello(): string {
     // return this.appService2.getHello();
+    console.log('http.port:', this.configService.get('http.port'));
     return this.appService.getHello();
   }
   @Bbb('hello3', 'admin')
