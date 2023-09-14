@@ -15,6 +15,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { SerializationModule } from './serialization/serialization.module';
 import { VersioningModule } from './versioning/versioning.module';
 import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
+import { QueuesModule } from './queues/queues.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -32,6 +33,7 @@ export const mockCatsService = {
     SerializationModule,
     VersioningModule,
     TaskSchedulingModule,
+    QueuesModule,
   ],
   controllers: [AppController],
   providers: [
