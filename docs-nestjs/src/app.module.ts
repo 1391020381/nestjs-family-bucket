@@ -14,6 +14,7 @@ import { Connection } from './connection';
 
 import { SerializationModule } from './serialization/serialization.module';
 import { VersioningModule } from './versioning/versioning.module';
+import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -29,6 +30,7 @@ export const mockCatsService = {
     CatModule,
     SerializationModule,
     VersioningModule,
+    TaskSchedulingModule,
   ],
   controllers: [AppController],
   providers: [
