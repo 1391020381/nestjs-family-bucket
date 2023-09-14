@@ -28,6 +28,8 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^3.0.3",
     "cache-manager": "^5.2.3",
+    "handlebars": "^4.7.8",
+    "hbs": "^4.2.0",
     "js-yaml": "^4.1.0",
     "nest-winston": "^1.9.4",
     "reflect-metadata": "^0.1.13",
