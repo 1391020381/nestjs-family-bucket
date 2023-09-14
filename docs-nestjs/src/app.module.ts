@@ -11,7 +11,8 @@ import { AppService } from './app.service';
 import { CatModule } from './cat/cat.module';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { Connection } from './connection';
-import { CachingModule } from './caching/caching.module';
+
+import { SerializationModule } from './serialization/serialization.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -25,7 +26,7 @@ export const mockCatsService = {
     }),
     CacheModule.register(),
     CatModule,
-    CachingModule,
+    SerializationModule,
   ],
   controllers: [AppController],
   providers: [
