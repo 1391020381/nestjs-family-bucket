@@ -21,6 +21,7 @@ import {
 import { Response } from 'express';
 import { CatService } from './cat.service';
 import { CreateCatDto, createCatSchema } from './dto/create-cat.dto';
+import { CreateCatDto2 } from './dto/CreateUserDto';
 // import { UpdateCatDto } from './dto/update-cat.dto';
 import { CustomException } from '../common/CustomException';
 import { CustomExceptionFilter } from '../common/CustomExceptionFilter';
@@ -35,7 +36,11 @@ export class CatController {
   create(@Body() createCatDto: CreateCatDto) {
     return this.catService.create(createCatDto);
   }
-
+  @Post('CreateCatDto2')
+  create2(@Body() createCatDto: CreateCatDto2) {
+    console.log('createCatDto:', createCatDto);
+    return createCatDto;
+  }
   @Get('breed')
   @UseFilters(new CustomExceptionFilter())
   @Header('Cache-Control', 'none')

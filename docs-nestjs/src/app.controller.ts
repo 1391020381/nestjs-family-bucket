@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Post,
   Inject,
   SetMetadata,
   UseGuards,
@@ -29,7 +30,9 @@ export class AppController {
   @UseGuards(AaaGuard)
   getHello(): string {
     // return this.appService2.getHello();
-    console.log('http.port:', this.configService.get('http.port'));
+    const http = this.configService.get('http');
+    console.log('http:', http);
+    console.log('http.port:', http.port);
     return this.appService.getHello();
   }
   @Bbb('hello3', 'admin')
