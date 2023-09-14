@@ -13,6 +13,7 @@ import { LoggerMiddleware } from './common/logger.middleware';
 import { Connection } from './connection';
 
 import { SerializationModule } from './serialization/serialization.module';
+import { VersioningModule } from './versioning/versioning.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -27,6 +28,7 @@ export const mockCatsService = {
     CacheModule.register(),
     CatModule,
     SerializationModule,
+    VersioningModule,
   ],
   controllers: [AppController],
   providers: [
