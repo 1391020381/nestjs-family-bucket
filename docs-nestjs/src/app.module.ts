@@ -5,11 +5,13 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatModule } from './cat/cat.module';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { Connection } from './connection';
+import { CachingModule } from './caching/caching.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -21,7 +23,9 @@ export const mockCatsService = {
     ConfigModule.forRoot({
       load: [configuration],
     }),
+    CacheModule.register(),
     CatModule,
+    CachingModule,
   ],
   controllers: [AppController],
   providers: [
