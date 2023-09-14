@@ -6,14 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  Logger,
+  Inject,
 } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import * as winston from 'winston';
 import { LoggerService } from './logger.service';
 import { CreateLoggerDto } from './dto/create-logger.dto';
 import { UpdateLoggerDto } from './dto/update-logger.dto';
 
 @Controller('logger')
 export class LoggerController {
-  constructor(private readonly loggerService: LoggerService) {}
+  constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+    private readonly loggerService: LoggerService,
+  ) {}
 
   @Post()
   create(@Body() createLoggerDto: CreateLoggerDto) {
@@ -22,6 +29,7 @@ export class LoggerController {
 
   @Get()
   findAll() {
+    this.logger.error('121231', { a: 1, b: 2 });
     return this.loggerService.findAll();
   }
 

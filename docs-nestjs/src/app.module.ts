@@ -4,6 +4,9 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
+import * as DailyRotateFile from 'winston-daily-rotate-file';
 import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
@@ -30,6 +33,49 @@ export const mockCatsService = {
     }),
     CacheModule.register(),
     ScheduleModule.forRoot(),
+    WinstonModule.forRoot({
+      transports: [
+        new DailyRotateFile({
+          level: 'error',
+          filename: 'logs/error-%DATE%.log',
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d',
+          handleExceptions: true,
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json(),
+          ),
+        }),
+        new DailyRotateFile({
+          level: 'warn',
+          filename: 'logs/warn-%DATE%.log',
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d',
+          handleExceptions: true,
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json(),
+          ),
+        }),
+        new DailyRotateFile({
+          level: 'info',
+          filename: 'logs/info-%DATE%.log',
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d',
+          handleExceptions: true,
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.json(),
+          ),
+        }),
+      ],
+    }),
     CatModule,
     SerializationModule,
     VersioningModule,
