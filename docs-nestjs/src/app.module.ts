@@ -20,6 +20,7 @@ import { VersioningModule } from './versioning/versioning.module';
 import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
 import { QueuesModule } from './queues/queues.module';
 import { LoggerModule } from './logger/logger.module';
+import { UploadModule } from './upload/upload.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -82,6 +83,7 @@ export const mockCatsService = {
     TaskSchedulingModule,
     QueuesModule,
     LoggerModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [
