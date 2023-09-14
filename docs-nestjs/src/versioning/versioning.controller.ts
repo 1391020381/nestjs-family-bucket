@@ -11,7 +11,10 @@ import { VersioningService } from './versioning.service';
 import { CreateVersioningDto } from './dto/create-versioning.dto';
 import { UpdateVersioningDto } from './dto/update-versioning.dto';
 
-@Controller('versioning')
+@Controller({
+  path: 'versioning',
+  version: ['1', '2'],
+})
 export class VersioningController {
   constructor(private readonly versioningService: VersioningService) {}
 

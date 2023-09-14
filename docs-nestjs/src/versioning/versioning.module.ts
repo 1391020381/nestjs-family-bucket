@@ -4,6 +4,6 @@ import { VersioningController } from './versioning.controller';
 
 @Module({
   controllers: [VersioningController],
-  providers: [VersioningService]
+  providers: [VersioningService],
 })
 export class VersioningModule {}
