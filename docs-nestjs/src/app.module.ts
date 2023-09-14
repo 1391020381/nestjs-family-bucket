@@ -11,7 +11,7 @@ import { AppService } from './app.service';
 import { CatModule } from './cat/cat.module';
 import { LoggerMiddleware } from './common/logger.middleware';
 import { Connection } from './connection';
-
+import { ScheduleModule } from '@nestjs/schedule';
 import { SerializationModule } from './serialization/serialization.module';
 import { VersioningModule } from './versioning/versioning.module';
 import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
@@ -27,6 +27,7 @@ export const mockCatsService = {
       load: [configuration],
     }),
     CacheModule.register(),
+    ScheduleModule.forRoot(),
     CatModule,
     SerializationModule,
     VersioningModule,

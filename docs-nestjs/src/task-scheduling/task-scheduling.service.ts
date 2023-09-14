@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateTaskSchedulingDto } from './dto/create-task-scheduling.dto';
 import { UpdateTaskSchedulingDto } from './dto/update-task-scheduling.dto';
-
+import { Cron } from '@nestjs/schedule';
 @Injectable()
 export class TaskSchedulingService {
+  private readonly logger = new Logger(TaskSchedulingService.name);
   create(createTaskSchedulingDto: CreateTaskSchedulingDto) {
     return 'This action adds a new taskScheduling';
   }
@@ -22,5 +23,11 @@ export class TaskSchedulingService {
 
   remove(id: number) {
     return `This action removes a #${id} taskScheduling`;
+  }
+  @Cron('3 * * * * *', {
+    name: 'my-cron-job',
+  }) // every minute, on the 3th second
+  handleCron() {
+    this.logger.debug('Called when the current second is 3');
   }
 }

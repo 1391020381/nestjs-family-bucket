@@ -44,3 +44,6 @@
 - sample https://github.com/nestjs/nest/tree/master/sample
 
 # versioning
+
+- Task scheduling
+- 注意，在 NestJS 9 中，由于 Cron 类使用 Node.js 的内置定时器实现，因此没有提供任何方法来停止或获取正在运行的定时任务的状态。因此，在上述控制器中，我们无法停止或获取正在运行的定时任务的状态。
