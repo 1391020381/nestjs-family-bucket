@@ -20,6 +20,7 @@ async function bootstrap() {
   );
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  app.set('view cache', false);
   app.setViewEngine('hbs');
   await app.listen(3000);
 }

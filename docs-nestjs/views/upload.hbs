@@ -4,7 +4,14 @@
     <title>Nest upload</title>
   </head>
   <body>
-    {{message}}
-    Nest upload
+    <input type='file' id='fileInput' />
+
+    <script>
+      const fileInput = document.getElementById('fileInput')
+      fileInput.addEventListener('change', () => { const file =
+      fileInput.files[0]; const formData = new FormData();
+      formData.append('file', file); fetch('http://localhost:3000/upload', {
+      method: 'POST', body: formData }) })
+    </script>
   </body>
 </html>

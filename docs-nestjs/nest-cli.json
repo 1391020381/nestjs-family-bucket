@@ -6,7 +6,16 @@
     "deleteOutDir": true,
     "assets": [
       { "include": "../config/*.yaml", "outDir": "./dist/config" },
-      { "include": "../views/*.hbs", "outDir": "./dist/views" }
+      {
+        "include": "../views/*.hbs",
+        "outDir": "./dist/views",
+        "watchAssets": true
+      },
+      {
+        "include": "../uploads/*",
+        "outDir": "./dist/uploads",
+        "watchAssets": true
+      }
     ]
   }
 }
