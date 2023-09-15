@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Render,
 } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { CreateUploadDto } from './dto/create-upload.dto';
@@ -19,16 +20,20 @@ export class UploadController {
   create(@Body() createUploadDto: CreateUploadDto) {
     return this.uploadService.create(createUploadDto);
   }
-
   @Get()
-  findAll() {
-    return this.uploadService.findAll();
+  @Render('upload')
+  root() {
+    return { message: 'Hello world!' };
   }
+  // @Get()
+  // findAll() {
+  //   return this.uploadService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.uploadService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.uploadService.findOne(+id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUploadDto: UpdateUploadDto) {
