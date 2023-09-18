@@ -21,6 +21,7 @@ import { TaskSchedulingModule } from './task-scheduling/task-scheduling.module';
 import { QueuesModule } from './queues/queues.module';
 import { LoggerModule } from './logger/logger.module';
 import { UploadModule } from './upload/upload.module';
+import { WebsocketsModule } from './websockets/websockets.module';
 import configuration from '../config/configuration';
 export const mockCatsService = {
   getHello: function () {
@@ -84,6 +85,7 @@ export const mockCatsService = {
     QueuesModule,
     LoggerModule,
     UploadModule,
+    WebsocketsModule,
   ],
   controllers: [AppController],
   providers: [
