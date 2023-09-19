@@ -43,7 +43,7 @@ export class UploadController {
   //   return this.uploadService.create(createUploadDto);
   // }
   @Get()
-  @Render('upload')
+  @Render('client')
   root() {
     return { message: 'Hello' };
   }
