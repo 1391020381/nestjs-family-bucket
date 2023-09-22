@@ -21,4 +21,8 @@ export class UserController {
     console.log(registerUser);
     return await this.userService.register(registerUser);
   }
+  @Post('redis')
+  async redisSet(@Body() redis: any) {
+    return await this.userService.redisSet(redis.key, redis.value);
+  }
 }

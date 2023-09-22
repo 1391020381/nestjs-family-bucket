@@ -24,7 +24,10 @@ export class UserService {
   private redisService: RedisService;
 
   async register(user: RegisterUserDto) {
-    const captcha = await this.redisService.get(`captcha_${user.email}`);
+    console.log('captcha_${user.email}', `captcha_${user.email}`);
+    // const captcha = await this.redisService.get(`captcha_${user.email}`);
+    const captcha = await this.redisService.get('a');
+    console.log('captcha:', captcha);
     if (!captcha) {
       throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
     }
@@ -49,5 +52,8 @@ export class UserService {
       this.logger.error(e, UserService);
       return '注册失败';
     }
+  }
+  async redisSet(key, value) {
+    await this.redisService.set(`${key}`, value);
   }
 }
