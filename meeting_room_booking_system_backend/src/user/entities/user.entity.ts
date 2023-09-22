@@ -1,66 +1,37 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { Role } from './role.entity';
-@Entity({
-  name: 'users',
-})
-export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 
-  @Column({
-    length: 50,
-    comment: '用户名',
+export class User {
+  @IsNotEmpty({
+    message: '用户名不能为空',
   })
   username: string;
 
-  @Column({
-    length: 50,
+  @IsNotEmpty({
+    message: '昵称不能为空',
+  })
+  nickName: string;
+
+  @IsNotEmpty({
+    message: '密码不能为空',
+  })
+  @MinLength(6, {
+    message: '密码不能少于 6 位',
   })
   password: string;
 
-  @Column({
-    comment: '头像',
-    length: 100,
-    nullable: true,
+  @IsNotEmpty({
+    message: '邮箱不能为空',
   })
-  headPic: string;
+  @IsEmail(
+    {},
+    {
+      message: '不是合法的邮箱格式',
+    },
+  )
+  email: string;
 
-  @Column({
-    comment: '手机号',
-    length: 20,
-    nullable: true,
+  @IsNotEmpty({
+    message: '验证码不能为空',
   })
-  phoneNumber: string;
-
-  @Column({
-    comment: '是否冻结',
-    default: false,
-  })
-  isFrozen: boolean;
-
-  @Column({
-    comment: '是否是管理员',
-    default: false,
-  })
-  isAdmin: boolean;
-
-  @CreateDateColumn()
-  createTime: Date;
-
-  @UpdateDateColumn()
-  updateTime: Date;
-
-  @ManyToMany(() => Role)
-  @JoinTable({
-    name: 'user_roles',
-  })
-  roles: Role[];
+  captcha: string;
 }
