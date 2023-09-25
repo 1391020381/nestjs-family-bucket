@@ -1,5 +1,5 @@
 # redis
-
+* [Redis面经：重新梳理了 5 种数据类型的用法和应用场景](https://blog.csdn.net/zhenghhgz/article/details/109718956)
 - redis 的 database 就是一个命名空间的概念
 - 把存储的 key-value 的数据放到不同命名空间下，避免冲突。
 
