@@ -21,7 +21,7 @@ export class UserService {
   private userRepository: Repository<User>;
 
   @Inject(RedisService)
-  private redisService: RedisService;
+  private readonly redisService: RedisService;
 
   async register(user: RegisterUserDto) {
     console.log('captcha_${user.email}', `captcha_${user.email}`);
