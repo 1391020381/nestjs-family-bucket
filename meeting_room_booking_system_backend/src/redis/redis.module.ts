@@ -14,7 +14,7 @@ import { createClient } from 'redis';
             host: '127.0.0.1',
             port: 6379,
           },
-          database: 1,
+          // database: 1,
         });
         await client.connect();
         return client;
