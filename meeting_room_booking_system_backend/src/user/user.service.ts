@@ -25,8 +25,7 @@ export class UserService {
 
   async register(user: RegisterUserDto) {
     console.log('captcha_${user.email}', `captcha_${user.email}`);
-    // const captcha = await this.redisService.get(`captcha_${user.email}`);
-    const captcha = await this.redisService.get('a');
+    const captcha = await this.redisService.get(`captcha_${user.email}`);
     console.log('captcha:', captcha);
     if (!captcha) {
       throw new HttpException('验证码已失效', HttpStatus.BAD_REQUEST);
