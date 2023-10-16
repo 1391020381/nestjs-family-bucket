@@ -2,37 +2,28 @@ import {
   Body,
   Controller,
   Get,
-  NotFoundException,
   Param,
   Post,
   Patch,
   Delete,
   ValidationPipe,
+  ParseIntPipe,
 } from "@nestjs/common";
-import { isNil } from "lodash";
-import { PostEntity } from "../types";
+import { PostService } from "../services/post.service";
+
 import { CreatePostDto } from "../dtos/create-post.dto";
 import { UpdatePostDto } from "../dtos/update-post.dto";
-let posts: PostEntity[] = [
-  { title: "第一篇文章标题", body: "第一篇文章内容" },
-  { title: "第二篇文章标题", body: "第二篇文章内容" },
-  { title: "第三篇文章标题", body: "第三篇文章内容" },
-  { title: "第四篇文章标题", body: "第四篇文章内容" },
-  { title: "第五篇文章标题", body: "第五篇文章内容" },
-  { title: "第六篇文章标题", body: "第六篇文章内容" },
-].map((v, id) => ({ ...v, id }));
+
 @Controller("post")
 export class PostController {
+  constructor(private postService: PostService) {}
   @Get()
   async index() {
-    return posts;
+    return this.postService.findAll();
   }
   @Get(":id")
   async show(@Param("id") id: number) {
-    const post = posts.find((item) => item.id === Number(id));
-    if (isNil(post))
-      throw new NotFoundException(`the post with id ${id} not exits`);
-    return post;
+    return this.postService.findOne(id);
   }
   @Post()
   async store(
@@ -47,12 +38,7 @@ export class PostController {
     )
     data: CreatePostDto
   ) {
-    const newPost: PostEntity = {
-      id: Math.max(...posts.map(({ id }) => id + 1)),
-      ...data,
-    };
-    posts.push(newPost);
-    return newPost;
+    return this.postService.create(data);
   }
   @Patch()
   async update(
@@ -65,22 +51,13 @@ export class PostController {
         groups: ["update"],
       })
     )
-    { id, ...data }: UpdatePostDto
+    data: UpdatePostDto
   ) {
-    let toUpdate = posts.find((item) => item.id === Number(id));
-    if (isNil(toUpdate))
-      throw new NotFoundException(`the post with id ${id} not exits!`);
-    toUpdate = { ...toUpdate, ...data };
-    posts = posts.map((item) => (item.id === Number(id) ? toUpdate : item));
-    return toUpdate;
+    return this.postService.update(data);
   }
 
   @Delete(":id")
-  async delete(@Param("id") id: number) {
-    const toDelete = posts.find((item) => item.id === Number(id));
-    if (isNil(toDelete))
-      throw new NotFoundException(`the post with id ${id} not exits!`);
-    posts = posts.filter((item) => item.id !== Number(id));
-    return toDelete;
+  async delete(@Param("id", new ParseIntPipe()) id: number) {
+    return this.postService.delete(id);
   }
 }
