@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { isNil } from "lodash";
-import { PostEntity } from "../types";
+
 import { CreatePostDto } from "../dtos/create-post.dto";
 import { UpdatePostDto } from "../dtos/update-post.dto";
 @Injectable()
 export class PostService {
-  protected posts: PostEntity[] = [
+  protected posts = [
     { title: "第一篇文章标题", body: "第一篇文章内容" },
     { title: "第二篇文章标题", body: "第二篇文章内容" },
     { title: "第三篇文章标题", body: "第三篇文章内容" },
@@ -25,7 +25,7 @@ export class PostService {
   }
 
   async create(data: CreatePostDto) {
-    const newPost: PostEntity = {
+    const newPost = {
       id: Math.max(...this.posts.map(({ id }) => id + 1)),
       ...data,
     };
