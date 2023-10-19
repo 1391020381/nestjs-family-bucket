@@ -9,6 +9,3 @@ export class PostRepository extends Repository<PostEntity> {
     return this.createQueryBuilder("post");
   }
 }
-
-// src/modules/content/repositories/index.ts
-export * from "./post.repository";

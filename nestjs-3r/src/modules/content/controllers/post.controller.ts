@@ -1,63 +1,54 @@
 import {
-  Body,
   Controller,
   Get,
+  Query,
   Param,
   Post,
+  Body,
   Patch,
   Delete,
-  ValidationPipe,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from "@nestjs/common";
 import { PostService } from "../services/post.service";
-
-import { CreatePostDto } from "../dtos/create-post.dto";
-import { UpdatePostDto } from "../dtos/update-post.dto";
-
-@Controller("post")
+import { PaginateOptions } from "@/modules/database/types";
+@Controller("posts")
 export class PostController {
-  constructor(private postService: PostService) {}
+  constructor(protected service: PostService) {}
+
   @Get()
-  async index() {
-    return this.postService.findAll();
+  async list(
+    @Query()
+    options: PaginateOptions
+  ) {
+    return this.service.paginate(options);
   }
+
   @Get(":id")
-  async show(@Param("id") id: number) {
-    return this.postService.findOne(id);
+  async detail(
+    @Param("id", new ParseUUIDPipe())
+    id: string
+  ) {
+    return this.service.detail(id);
   }
+
   @Post()
   async store(
-    @Body(
-      new ValidationPipe({
-        transform: true,
-        forbidNonWhitelisted: true,
-        forbidUnknownValues: true,
-        validationError: { target: false },
-        groups: ["create"],
-      })
-    )
-    data: CreatePostDto
+    @Body()
+    data: Record<string, any>
   ) {
-    return this.postService.create(data);
+    return this.service.create(data);
   }
+
   @Patch()
   async update(
-    @Body(
-      new ValidationPipe({
-        transform: true,
-        forbidNonWhitelisted: true,
-        forbidUnknownValues: true,
-        validationError: { target: false },
-        groups: ["update"],
-      })
-    )
-    data: UpdatePostDto
+    @Body()
+    data: Record<string, any>
   ) {
-    return this.postService.update(data);
+    return this.service.update(data);
   }
 
   @Delete(":id")
-  async delete(@Param("id", new ParseIntPipe()) id: number) {
-    return this.postService.delete(id);
+  async delete(@Param("id", new ParseUUIDPipe()) id: string) {
+    return this.service.delete(id);
   }
 }
