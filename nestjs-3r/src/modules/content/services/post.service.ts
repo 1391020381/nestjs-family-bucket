@@ -6,6 +6,7 @@ import { PostEntity } from "../entities/post.entity";
 import { PaginateOptions, QueryHook } from "@/modules/database/types";
 import { paginate } from "@/modules/database/helpers";
 import { PostOrderType } from "../constants";
+import { CreatePostDto, UpdatePostDto } from "../dtos/post.dto";
 @Injectable()
 export class PostService {
   constructor(protected repository: PostRepository) {}
@@ -43,7 +44,7 @@ export class PostService {
    * 创建文章
    * @param data
    */
-  async create(data: Record<string, any>) {
+  async create(data: CreatePostDto) {
     const item = await this.repository.save(data);
 
     return this.detail(item.id);
@@ -53,7 +54,7 @@ export class PostService {
    * 更新文章
    * @param data
    */
-  async update(data: Record<string, any>) {
+  async update(data: UpdatePostDto) {
     await this.repository.update(data.id, omit(data, ["id"]));
     return this.detail(data.id);
   }
