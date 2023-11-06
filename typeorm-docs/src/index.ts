@@ -1,4 +1,5 @@
 import { AppDataSource } from "./data-source";
+import { Photo } from "./entity/Photo";
 import { User } from "./entity/User";
 
 AppDataSource.initialize()
@@ -18,6 +19,15 @@ AppDataSource.initialize()
     console.log(
       "Here you can setup and run express / fastify / any other framework."
     );
-    console.log("change!!!!!!!!");
+    console.log("change!!!!!!!!------");
+
+    // Photo
+    let photo = new Photo();
+    photo.name = "Me and Bears";
+    photo.description = "I am near polar bears";
+    photo.filename = "photo-with-bears-jpg";
+    photo.views = 1;
+    photo.isPublished = true;
+    await AppDataSource.manager.save(photo);
   })
   .catch((error) => console.log(error));

@@ -11,7 +11,12 @@ export const AppDataSource = new DataSource({
   database: "typeorm-docs",
   synchronize: true,
   logging: true,
-  entities: [User],
+  // entities: [User],
+  entities: ["src/entity/**/*.ts"],
   migrations: [],
   subscribers: [],
+  connectorPackage: "mysql2",
+  extra: {
+    authPlugin: "sha256_password",
+  },
 });
