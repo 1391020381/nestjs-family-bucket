@@ -73,3 +73,5 @@ npx @openapitools/openapi-generator-cli generate -i api.json -g typescript-axios
 
 
 ```
+
+- [fix(typescript-axios): use baseURL of (custom) axios instance #16125](https://github.com/OpenAPITools/openapi-generator/pull/16125)
