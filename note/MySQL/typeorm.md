@@ -32,3 +32,5 @@ export const AppDataSource = new DataSource({
 2. 使用 Repositories let photoRepository = connection.getRepository(Photo);await photoRepository.save(photo)
 3. 关系可以是单向的或双向的。@OneToOne @JoinColumn
 4. 我嘛应该仅仅在关系的一侧使用 @JoinColumn装饰器。你把这个装饰器放在哪一方将是这段关系的拥有方。 关系的拥有方包含数据库中具有外健的列。
+
+- 在多对一 一对多的关系中 拥有方总是 多对一的。 这意味着使用 @ManyToOne的类存储相关对象的id.

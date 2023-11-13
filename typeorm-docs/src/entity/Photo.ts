@@ -1,11 +1,16 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { PhotoMetadata } from "./PhotoMetadata";
+import { User } from "./User";
+import { Album } from "./Album";
 
 @Entity()
 export class Photo {
@@ -31,4 +36,10 @@ export class Photo {
 
   @OneToOne((type) => PhotoMetadata, (photoMetadata) => photoMetadata.photo)
   metadata: PhotoMetadata;
+
+  @ManyToOne((type) => User, (user) => user.photos)
+  user: User;
+
+  @ManyToMany((type) => Album, (album) => album.photos)
+  albums: Album[];
 }
