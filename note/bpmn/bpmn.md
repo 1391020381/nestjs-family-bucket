@@ -8,7 +8,7 @@
 
 1. bpmn-engine bpmn.js camunda-bpmn-moddle bpmn-js-properties-panel
 2. nestjs @golevelup/nestjs-rabbitmq typeorm mysql nestjs-redis winston bpmn-engine
-3. 私有化部署
+3. 私有化部署 相关数据表结构
 
 ## [BPMN-http请求篇](https://juejin.cn/post/6844904017592614919)
 
