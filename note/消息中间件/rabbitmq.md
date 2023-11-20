@@ -20,7 +20,9 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 -v /Users/zhoujin/Volu
 
 * 消息生产者 消费者 及 RabbitQM 这个中间人三者不必同时存在与同一机器上,实际运用时也确实大部分不会部署在同一台机器上。 比如有专门的机器作为 RabbitQM实体 而应用程序会部署在其他的集群。 应用程序可以是同时负责生产消息的,也同时是消费者。
 
-# [消息队列助你成为高薪的 Node.js 工程师](https://juejin.cn/post/6844904003151593479#heading-38)
+- [Get Started with RabbitMQ in Node.js](https://sharmilas.medium.com/get-started-with-rabbitmq-in-node-js-1adb18d019d0)
+
+* [https://github.com/amqp-node/amqplib/tree/main/examples/tutorials](https://github.com/amqp-node/amqplib/tree/main/examples/tutorials)
 
 ## 基本概念
 
@@ -30,3 +32,15 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 -v /Users/zhoujin/Volu
 4. exchange: 交换机 消息需要先发送到 exchange交换机 也可以说是第一步存储消息的地方(交换机会有很多类型)
 5. 消息队列： 到达消费者前一刻存储消息的地方 exchange交换机会把消息传递到此。
 6. ack回执：收到消息后确认消息已经消费的应答。
+
+### 什么情况下需要创建 交换机
+
+- 在RabbitMQ中，交换机是用于消息路由的对象。交换机根据消息的路由键将消息路由到一个或多个队列中。因此，需要创建交换机的情况包括：
+
+1. 需要实现复杂的消息路由策略。RabbitMQ支持多种类型的交换机，例如直连交换机、主题交换机、扇形交换机等。不同类型的交换机可以实现不同的消息路由策略。如果需要实现复杂的消息路由，那么需要创建自定义的交换机。
+
+2. 需要将消息路由到多个队列中。如果需要将消息发送到多个队列中，那么可以创建一个扇形交换机，并将多个队列绑定到该交换机上。
+
+3. 需要对消息进行过滤或转换。在某些情况下，可能需要对消息进行过滤或转换，例如根据消息的内容或属性将消息路由到不同的队列中。这可以通过创建自定义的交换机和绑定来实现。
+
+总之，需要创建交换机的情况包括需要实现复杂的消息路由策略、需要将消息路由到多个队列中、需要对消息进行过滤或转换等。创建交换机可以实现更灵活、更高效的消息传递机制。
