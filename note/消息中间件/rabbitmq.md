@@ -44,3 +44,42 @@ docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 -v /Users/zhoujin/Volu
 3. 需要对消息进行过滤或转换。在某些情况下，可能需要对消息进行过滤或转换，例如根据消息的内容或属性将消息路由到不同的队列中。这可以通过创建自定义的交换机和绑定来实现。
 
 总之，需要创建交换机的情况包括需要实现复杂的消息路由策略、需要将消息路由到多个队列中、需要对消息进行过滤或转换等。创建交换机可以实现更灵活、更高效的消息传递机制。
+
+在使用amqplib时，如果不需要使用交换机，是可以不创建交换机的。但是，如果你需要使用特定类型的交换机来实现更高级的消息路由，或者需要将消息发送到多个队列，那么你需要创建交换机并将其绑定到队列上。
+
+在amqplib中，使用`assertExchange()`方法来声明交换机，使用`bindQueue()`方法将队列绑定到交换机上。例如，下面的代码将创建一个名为`myExchange`的直接交换机，并将其绑定到名为`myQueue`的队列上：
+
+```
+const exchangeName = 'myExchange';
+const queueName = 'myQueue';
+const routingKey = 'myRoutingKey';
+
+// 声明交换机
+await channel.assertExchange(exchangeName, 'direct', { durable: false });
+
+// 声明队列
+await channel.assertQueue(queueName, { durable: false });
+
+// 将队列绑定到交换机上
+await channel.bindQueue(queueName, exchangeName, routingKey);
+```
+
+这将使得通过交换机`myExchange`和路由键`myRoutingKey`发送到的消息被路由到队列`myQueue`上。
+
+- channel.publish
+
+* [RabbitMQ 从入门到精通](https://juejin.cn/post/7134967327996526605)
+* 交换机时 RabbitMQ 非常重要的一个部件 一方面它接受来自生产者的消息 另一方面它将消息推送到队列。 交换机必须确切知道如何处理它接受到的消息 是将这些消息推送到特定队列还是 推送到多个队列 或者是把消息 丢弃 这个得是交换机类型来决定的。
+
+* Virtual host 出于多租户和安全因素设计的， 把 AMQP的基础组件划分到一个虚拟的分组中,类似 于网络中的 namespace 概念。 当多个不同用户使用同一个 RabbitMQ server 提供的服务时,可以划分出多个 vhost 每个用户在自己的 vhost创建 exchange / queue等。
+
+* [RabbitMQ基础复习](https://juejin.cn/post/7248914499914481725)
+
+* [Kafka 入门](https://juejin.cn/post/6844903495670169607)
+
+## kafka的基本术语
+
+- 消息: kafka 中的数据单元被称为 消息 也被称为记录 可以把它看作数据库表中的某一行的记录。
+- 批次: 为了提高效率 消息会 分批次 写入Kafka 批次就代指是一组消息。
+- 主题: 消息的种类称为 主题 (Topic) 可以说一个主题代表了一类消息。 相当于是对消息进行分类。 主题就像数据库中的表。
+- 分区: 主题可以被分为若干个分区(partition) 同一个主题中的分区可以不在一个机器上,有可能会部署在多个机器上,由此来实现kafka的伸缩性。
