@@ -23,4 +23,11 @@
 1. 要想使用左侧工具栏 只需要在项目中引用相应的样式就可以了。
 2. 想要使用右侧的属性栏就得安装上一个 bpmn-js-properties-panel 插件
 
--
+# bpmn.js基本组成
+
+1. palette 左侧工具栏
+2. element(shape)
+3. element(connection)
+4. element overlay
+5. context-pad
+6. properties-panel 属性栏
