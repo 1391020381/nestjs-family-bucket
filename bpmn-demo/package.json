@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "bpmn-js": "^15.2.2",
     "vue": "^3.3.8",
     "vue-router": "4"
   },
