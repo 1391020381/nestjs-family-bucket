@@ -27,5 +27,5 @@ const engine = new Engine({
 
 engine.execute((err, execution) => {
   console.log(err);
-  console.log("Execution:", execution);
+  console.log("Execution:", execution.environment.variables.id);
 });

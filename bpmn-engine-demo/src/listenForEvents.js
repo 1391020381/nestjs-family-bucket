@@ -28,6 +28,7 @@ const engine = new Engine({
 const listener = new EventEmitter();
 
 listener.once("wait", (task) => {
+  console.log("wait------:");
   task.signal({
     ioSpecification: {
       dataOutputs: [
