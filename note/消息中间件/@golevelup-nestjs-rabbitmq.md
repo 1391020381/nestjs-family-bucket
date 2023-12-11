@@ -1,0 +1,1 @@
+# @golevelup/nestjs-rabbitmq
