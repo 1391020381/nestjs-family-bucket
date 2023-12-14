@@ -73,6 +73,13 @@ await channel.bindQueue(queueName, exchangeName, routingKey);
 
 * Virtual host 出于多租户和安全因素设计的， 把 AMQP的基础组件划分到一个虚拟的分组中,类似 于网络中的 namespace 概念。 当多个不同用户使用同一个 RabbitMQ server 提供的服务时,可以划分出多个 vhost 每个用户在自己的 vhost创建 exchange / queue等。
 
+* Exchange 主要有4种
+
+  - fanout 把消息放到这个交换机的所有Queue
+  - direct 把消息放到交换机的指定key的队列中
+  - topic 把消息放到交换机的指定key的队列中，支持模糊匹配
+  - headers 把消息放到交换机的满足某些header的队列
+
 * [RabbitMQ基础复习](https://juejin.cn/post/7248914499914481725)
 
 * [Kafka 入门](https://juejin.cn/post/6844903495670169607)
