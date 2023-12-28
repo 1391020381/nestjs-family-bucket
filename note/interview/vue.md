@@ -43,10 +43,68 @@
    - select
    - checkbox 多个复选框使用数组来获取数据
    - lazy number trim
-8. 生命周期
-9. props (类型和默认值)
-10. v-on $emit
+8. 生命周期 官网视图 父子组件
+9. Vue父子组件生命周期的顺序如下：
+   - 1. 父组件beforeCreate
+   - 2. 父组件created
+   - 3. 父组件beforeMount
+   - 4. 子组件beforeCreate
+   - 5. 子组件created
+   - 6. 子组件beforeMount
+   - 7. 子组件mounted
+   - 8. 父组件mounted
+   - 9. 父组件beforeUpdate
+   - 10. 子组件beforeUpdate
+   - 11. 子组件updated
+   - 12. 父组件updated
+   - 13. 父组件beforeDestroy
+   - 14. 子组件beforeDestroy
+   - 15. 子组件destroyed
+   - 16. 父组件destroyed
+
+在父子组件的生命周期中，父组件的生命周期先于子组件的生命周期。在组件挂载时，先挂载子组件，再挂载父组件；在组件销毁时，先销毁父组件，再销毁子组件。在更新时，先更新父组件，再更新子组件。
+
+- Vue父子组件生命周期的执行顺序和Vue的组件树形结构有关系。在Vue中，每个组件都是一个树形结构，父组件包含子组件，子组件又可以包含其他子组件，这种结构就像DOM树一样。
+
+在组件的挂载、更新和销毁过程中，Vue会按照组件树的结构从上到下依次执行生命周期函数。这是因为在组件挂载时，先挂载子组件，再挂载父组件，这样可以保证子组件中的数据和方法已经准备好，父组件在挂载时可以直接使用子组件的数据和方法。在组件销毁时，先销毁父组件，再销毁子组件，这样可以保证子组件中的数据和方法不会被父组件使用，也可以避免内存泄漏。
+
+在更新时，Vue会先更新父组件，再更新子组件，这样可以保证父组件中的数据和方法已经更新完毕，子组件在更新时可以使用最新的父组件数据。同时，Vue还会在更新前后比较虚拟DOM树的差异，只更新需要更新的部分，这样可以提高更新效率。
+
+因此，Vue父子组件生命周期的执行顺序和组件树形结构有关系，这种结构可以保证组件之间的数据和方法的正确性和可用性，同时也可以提高更新效率。9. props (类型和默认值) 10. v-on $emit
 11. 自定义事件
+    - EventBus event.$on('onAddTitle',this.addTitleHandler) event.$off('onAddTitle',this.addTitleHandler)
+Vue组件通讯的方法主要有以下几种：
+
+1. Props和$emit：父组件通过props向子组件传递数据，子组件通过$emit触发事件向父组件传递数据。这种方式适合父子组件之间的通讯。
+
+2. $parent和$children：可以通过$parent和$children访问父组件和子组件的实例，从而实现组件之间的通讯。这种方式适合父子组件之间的紧密耦合的通讯。
+
+3. $attrs和$listeners：可以通过$attrs和$listeners访问父组件传递给子组件的属性和事件，从而实现组件之间的通讯。这种方式适合需要将大量属性和事件传递给子组件的场景。
+
+4. provide和inject：可以通过provide和inject实现祖先组件向后代组件的数据传递。这种方式适合祖先组件和后代组件之间的通讯。
+
+5. EventBus：可以使用一个全局的EventBus实例来实现组件之间的通讯。这种方式适合组件之间的松散耦合的通讯。
+
+6. Vuex：可以使用Vuex来管理组件之间的共享状态。这种方式适合大型应用程序中的组件通讯。
+
+以上是Vue组件通讯的常用方法，根据实际场景选择合适的方式可以提高应用程序的性能和可维护性。
+
+12. vue高级特性
+    - Pinia 在非组件内使用
+    - 自定义 v-model 自定义dialog
+    - $nextTick refs
+    - slot
+    - 动态异步组件 路由组件动态加载
+    - keep-alive
+    - mixin
+
+```
+store/index.ts
+import { createPinia } from 'pinia';
+const store = createPinia();
+export default store;
+
+```
 
 # Vue3
 
