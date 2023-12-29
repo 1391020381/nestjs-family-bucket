@@ -91,12 +91,15 @@ Vue组件通讯的方法主要有以下几种：
 
 12. vue高级特性
     - Pinia 在非组件内使用
-    - 自定义 v-model 自定义dialog
+    - 自定义 v-model 自定义dialog model prop event emit(event.name)
     - $nextTick refs
-    - slot
-    - 动态异步组件 路由组件动态加载
-    - keep-alive
-    - mixin
+    - slot 基本使用 作用域插槽（将插槽里面变量 可以在父组件使用） 具名插槽
+    - 动态组件 component is
+    - 异步组件
+      - 组件引入 FormDemo:()=> import("../BaseUse/FormDemo")
+    - 路由组件异步加载
+    - keep-alive activated 和 deactivated 用在其一个直属的子组件被开关的情形。
+    - mixin 和 vue单文件 script export default {} 部分 感觉和抽离方法 类似 且变量来源不明确 多 mixin 命名冲突 city= '武汉' city ='北京'
 
 ```
 store/index.ts
@@ -105,6 +108,40 @@ const store = createPinia();
 export default store;
 
 ```
+
+### Vuex
+
+1. state
+2. getters
+3. action
+4. mutation
+
+5. dispatch
+6. commit
+7. mapState
+8. mapGetters
+9. mapActions
+10. mapMutations
+11. 数据流转 action 才可以异步操作
+
+### Vue Router
+
+1. 路由模式 hash H5 history
+2. 路由配置 动态路由 懒加载
+
+### Vue2原理
+
+1. 重点 2/8原则
+2. 使用相关 vdom 模版渲染
+3. 整体流程是否全面 热门技术是否有深度
+
+4. 组件化
+   - MVVM
+5. 响应式
+6. vdom diff
+7. 模版编译
+8. 渲染过程
+9. 前端路由
 
 # Vue3
 
