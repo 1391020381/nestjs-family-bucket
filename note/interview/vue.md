@@ -136,7 +136,9 @@ export default store;
 3. 整体流程是否全面 热门技术是否有深度
 
 4. 组件化
-   - MVVM
+   - 组件化 原有模版渲染也有
+   - 数据驱动视图
+   - MVVM View ViewModel Model
 5. 响应式
 6. vdom diff
 7. 模版编译
