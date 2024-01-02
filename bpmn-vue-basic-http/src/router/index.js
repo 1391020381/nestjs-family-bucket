@@ -35,6 +35,14 @@ const routes = [
     path: "/event",
     component: () => import("./../components/event"),
   },
+  {
+    path: "/vueDiff",
+    component: () => import("./../components/vueDiff"),
+  },
+  {
+    path: "/vueDiffOpt",
+    component: () => import("./../components/vueDiffOpt"),
+  },
 ];
 
 export default new Router({

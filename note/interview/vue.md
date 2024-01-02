@@ -140,10 +140,236 @@ export default store;
    - 数据驱动视图
    - MVVM View ViewModel Model
 5. 响应式
+   - Object.defineProperty
+   - 对象
+   - 复杂对象 深度监听 需要递归到底 一次性计算量很大
+   - 数组 重新定义data数组原型 不能污染全局的数组原型
+   - 缺点
+   - 无法监听新增属性/删除属性 (Vue.set Vue.delete)
 6. vdom diff
+   - dom操作非常耗费性能
+   - 用 js模拟 dom结构 tag props children
+   - 新旧vnode对比 得出最小更新范围 最后更新dom
+   - 数据驱动视图的模式下 有效控制dom操作。
+   - linux diff git diff
+   - 书 diff的时间复杂度 O(n^3) 遍历 tree1 tree2 排序
+   - 优化时间复杂度到O(n)
+   - 只比较同一层级 不跨级比较
+   - tag 不相同 则直接删除重建 不再深度比较
+   - tag 和 key 两者都相同 则认为是相同节点 不再深度比较。
+   - patchVnode
+   - addVnodes removeVnodes
+   - updateChildren key的重要性
+   - hook = vnode.data?.hook
+   - 新旧都有children updateChildren
+   - 新children有 旧children无 addVnodes
+   - 旧有children 新child无 removeVnodes
+   - vdom存在的价值 数据驱动视图 跨平台
 7. 模版编译
-8. 渲染过程
+   - with(){}
+   - 改变 {} 内自由变量的查找规则,当做obj属性来查找
+   - 如果找不到匹配的obj属性 就会报错。
+   - with要慎用 它打破了作用域规则 已读性变差
+   - \_c createElement
+   - -v createTextVNode
+   - -s toString
+   - template -> render -> vnode -> path diff
+   - webpack vue-loader 会在开发环境编译模版。
+8. 组件渲染和更新过程
+   - 一个页面渲染页面 修改data触发更新(数据驱动视图)
+   - 其背后原理是什么 需要掌握哪些要点 全面程度
+   - 响应式 对象 数组
+   - 模版编译 template render vnode
+   - vdom path(elem,vnode) path(vnode,newVnode)
+   - 渲染和响应式
+   - 渲染和模版编译
+   - 渲染和vdom
+   - 初次渲染过程
+     - 解析模版为render函数(开发环境已经完成 vue-loader)
+     - 触发响应式 监听data属性 getter setter
+     - 执行 render函数 生成 vnode path(elem,vnode)
+   - 更新过程
+     - 修改data 触发setter (此前在getter中已被监听)
+     - 重新执行 render函数 生成 newVnode
+     - patch(vnode,newVnode) 官网 深入响应式原理
+   - 异步渲染
+     - $nextTick
+     - 汇总 data的修改 一次性更新视图
+     - 减少 dom操作次数 提高性能
 9. 前端路由
+
+- spa
+
+- hash
+  - hash变化会触发网页跳转 即浏览器的前进 后退
+  - hash变化不会刷新页面 spa必须特点
+  - hash永远不会提交到 server端
+
+* history
+
+  - 用 url规范的路由 但跳转时不刷新页面
+  - history.pushState
+  - history.replaceState
+
+* vue-router父子嵌套路由 子路由是否包含 父pathde 配置 子路由是否 以 /开头 就不用包含父 path
+
+```
+window.onhashchange = (event)=>{
+
+}
+
+
+```
+
+```
+// 插值
+const template = `<p>{{message}}</p>`
+with(this){
+    return createElement('p',[createTextVNode(toString(message))])
+}
+// 表达式
+const template = `<p>{{flag?message:'no message found'}}</p>`
+with(this){
+    return _c('p',[_v(_s(flag?message:'no message found'))])
+}
+
+// 属性和动态属性
+
+```
+
+```
+
+const oldArrayProperty = Array.prototype
+// 创建新对象 原型指向 oldArrayProperty
+// 再扩展新的方法不会影响原型
+const arrProto = Object.create(oldArrayProperty)
+
+arrProto.push = function () {
+    console.log(100)
+}
+
+arrProto.__proto__.push()
+
+['push','pop','shift','unshift','splice'].forEach(methodName=>{
+    arrProto[methodName] = function(){
+        updateView();
+        oldArrayProperty[methodName].call(this,...arguments)
+    }
+})
+
+
+// 在响应式中
+
+if(Array.isArray(target){
+    target.__proto__ = arrProto
+})
+
+
+<div id="div1" class="container">
+    <p>vdom</p>
+    <ul style="font-size:20px">
+        <li>a</li>
+    </ul>
+</div>
+{
+    tag:"div",
+    props:{
+        className:"container",
+        id:"div1"
+    },
+    children:[
+        {
+            tag:'p',
+            children:'vdom'
+        },
+        {
+            tag:"ul",
+            props:{style:'font-size:20px'},
+            children:[
+                {
+                    tag:'li',
+                    children:'a'
+                }
+            ]
+        }
+    ]
+}
+
+```
+
+````
+当使用 `index` 作为 `key` 时，可能会出现无法正确跟踪每个元素状态的情况。下面是一个简单的示例：
+
+```html
+<template>
+  <div>
+    <ul>
+      <li v-for="(item, index) in list" :key="index">
+        {{ item }}
+        <button @click="removeItem(index)">Remove</button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      list: [1, 2, 3],
+    };
+  },
+  methods: {
+    removeItem(index) {
+      this.list.splice(index, 1);
+    },
+  },
+};
+</script>
+````
+
+在上面的示例中，我们使用 `index` 作为 `key` 来循环渲染列表。当我们点击某个元素的删除按钮时，会通过 `splice` 方法从列表中删除该元素。但是，由于我们使用 `index` 作为 `key`，Vue 无法正确跟踪每个元素的状态，因此会出现一些意想不到的问题。
+
+例如，当我们点击第二个元素的删除按钮时，我们期望的结果是列表变成 `[1, 3]`。但是，由于我们使用 `index` 作为 `key`，Vue 无法正确跟踪每个元素的状态，导致删除后的列表变成了 `[1, 2]`，即删除了第二个元素后，第三个元素变成了第二个元素，但是 Vue 仍然认为它是第三个元素，因此删除操作出现了错误。
+
+为了解决这个问题，我们可以使用每个元素自身的唯一标识符作为 `key`，例如：
+
+```html
+<template>
+  <div>
+    <ul>
+      <li v-for="item in list" :key="item.id">
+        {{ item.name }}
+        <button @click="removeItem(item)">Remove</button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        list: [
+          { id: 1, name: "John" },
+          { id: 2, name: "Mary" },
+          { id: 3, name: "Tom" },
+        ],
+      };
+    },
+    methods: {
+      removeItem(item) {
+        const index = this.list.indexOf(item);
+        this.list.splice(index, 1);
+      },
+    },
+  };
+</script>
+```
+
+在上面的示例中，我们使用每个元素自身的唯一标识符 `id` 作为 `key`，这样 Vue 就能够正确跟踪每个元素的状态，从而避免出现删除错误元素的问题。
+
+```
 
 # Vue3
 
@@ -177,3 +403,4 @@ export default store;
 
 - vue3
 - 低代码
+```
