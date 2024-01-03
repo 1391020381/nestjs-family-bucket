@@ -43,6 +43,10 @@ const routes = [
     path: "/vueDiffOpt",
     component: () => import("./../components/vueDiffOpt"),
   },
+  {
+    path: "/scopedSlotDemo",
+    component: () => import("./../components/scopedSlotDemo"),
+  },
 ];
 
 export default new Router({

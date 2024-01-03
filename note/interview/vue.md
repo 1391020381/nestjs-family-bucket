@@ -334,7 +334,8 @@ export default {
 
 为了解决这个问题，我们可以使用每个元素自身的唯一标识符作为 `key`，例如：
 
-```html
+```
+html
 <template>
   <div>
     <ul>
@@ -369,11 +370,305 @@ export default {
 
 在上面的示例中，我们使用每个元素自身的唯一标识符 `id` 作为 `key`，这样 Vue 就能够正确跟踪每个元素的状态，从而避免出现删除错误元素的问题。
 
-```
+## vue面试真题演练
+
+1. v-show 和 v-if的区别
+
+- v-show 通过css display控制显示和隐藏
+- v-if 组件真正的渲染销毁 vnode层面控制
+- 频繁切换使用 v-show 条件判断 v-if
+
+2. 为何在 v-for中使用 key
+
+- 必须用 key 且不能是index 和 random
+- diff算法中通过 tag key来判断 是否是 sameNode
+- 减少渲染次数 提升渲染性能
+
+3. Vue组件生命周期(父子组件) 创建 更新 销毁
+4. Vue组件如何通讯(常见)
+
+- props emit
+- 自定义事件 event.$on  event.off event.$emit
+- vuex
+
+5. 描述组件渲染和更新的过程 官网响应式原理
+6. v-model的实现原理
+
+- input元素 value = this.name
+- 绑定input事件 this.name = $event.target.value
+- data 更新触发 re-render
+
+7. 自定义组件 v-model
+
+- model props event
+- emit
+
+8. 对 MVVM的理解 官网的图片
+9. computed特点 更深 -> 原理
+10. 为何组件 data必须是一个函数
+
+- vue单文件 编译完其实是一个 calss, 每个地方使用 都是对 class的实例化,如果data不是函数的话，会导致 data变量会相互影响
+
+11. ajax请求应该放在哪个生命周期
+
+- mounted
+- js是单线程 ajax异步获取数据
+- 放在 mounted之前没有用 只会让逻辑更加混乱。 视图没有渲染完,ajax获取数据也会在视图渲染完 再更新。
+
+12. 如何将组件所有的props传递给子组件
+
+- $props
+- <User v-bind="$props" />
+
+13. 多组件相同逻辑抽离
+
+- mixin
+- 缺点
+
+14. 何时使用异步组件
+
+- 加载大组件 import 定义异步组件
+- 路由异步加载
+
+15. 何时需要使用 keep-alive
+
+- 滚动位置如何处理
+- 缓存组件 不需要重复渲染
+- 如多个静态tab页切换
+- 优化性能
+
+16. 何时需要使用 beforeDestory
+
+- 解绑自定义事件 event.$off
+- 清除定时器
+- 解绑 自定义 dom事件
+
+17. 什么是作用域插槽
+18. Vuex中action 和 mutation 区别
+
+- action中可以处理异步 mutation不可以
+- mutation 原子操作
+- action 可以整合多个 mutation
+
+19. vue-router常用的路由模式
+
+- hash 默认
+- h5 history 需要服务端支持
+- 比较选择
+
+20. 配置vue-router异步加载
+
+21. vnode 描述 dom结构
+
+22. 监听data 变化的核心api
+
+- Object.defineProperty
+- 深度监听 监听数组
+- 缺点
+
+23. vue如何监听数组变化
+
+- Object.definePropery 不能监听数组变化
+- 重新定义data 原型 重写 push pop 等方法 实现监听
+- Proxy可以原生支持监听数组变化
+
+24. 描述响应式原理
+
+- 监听 data变化
+- 渲染原理
+
+25. diff 算法时间复杂度
+
+- o(n)
+- 在o(n^3)基础上做了一些调整
+
+26. 简述diff算法过程
+
+- patch(elem,vnode) patch(vnode,newVnode)
+- pathVnode addVnodes removeVnodes
+- upateChildren(key的重要性)
+
+27. vue 为何异步渲染 $nextick作用
+
+- 异步渲染 合并data修改 提高渲染性能
+- nextTick在dom 更新完之后触发回调。
+
+27. vue常见性能优化
+
+- 合理使用 v-show v-if
+- 合理使用 computed
+- v-for 时 加 key 避免和v-if同时使用
+- 自定义事件 dom事件及时销毁
+- 合理使用异步组件
+- 合理使用 keep-alive
+- data层级不要太深
+- vue-loader 预编译
+- webpack层面优化
+- 前端通用性能优化 图片懒加载
+- 使用 SSR
 
 # Vue3
 
-## 使用
+1. createApp
+2. emits属性
+3. 多事件处理
+4. Fragment
+5. 移除 .sync 改为 v-model参数
+6. 异步组件的引用方式
+7. 移除 filter
+8. Teleport
+9. Suspense
+10. reactive
+11. ref toRef toRefs
+12. readonly
+13. computed
+14. watch watchEffect
+15. 钩子函数生命周期
+16. Proxy实现响应式
+17. 编译优化
+
+- PatchFlag静态标记
+- hoistStatic静态提升
+- cacheHandler缓存事件
+- SSR优化
+- Tree-shaking优化
+
+18. Vite
+    - es6 module
+
+# Vue3使用
+
+1. Vue3 比 Vue2 有什么优势
+
+- 性能更好
+- 体积更小
+- 更好的ts支持
+- 更好的代码组织
+- 更好的逻辑抽离
+- 更多新功能
+
+2. 描述Vue3生命周期
+
+- Options API 生命周期
+  - beforeDestroy 改为 beforeUnmount
+  - destroyed 改为 unmounted
+  - 其他沿用 Vue2生命周期
+  - beforeCreate
+  - created
+  - beforeMount
+  - mounted
+  - beforeUpdate
+  - updated
+  - beforeUnmount
+  - unmounted
+- Composition API生命周期
+  - onBeforeMount
+  - onMounted
+  - onBeforUpdate
+  - onUpdate
+  - onBeforeUnmount
+  - onUnmounted
+
+3. 如何看待 Composition API 和 Options API
+
+- Composition API 更好的代码组织
+- Composition API 更好的逻辑复用
+- Compositon API 更好的类型推导 vue2 中 this引用 不利于 ts类型推倒
+- 不建议共用 会引起混乱
+- 小型项目 业务逻辑简单 Options API
+- 中大型项目 逻辑复杂 Composition API
+- Composition API 高阶技巧 官网高阶指南
+- Composition API 是为了 解决复杂业务逻辑而设计
+- Composition API Hooks 在 React的地位
+
+4. 如何理解 ref toRef toRefs
+
+- ref
+- 生成值类型的响应式数据
+- 可用于模版和 reactive
+- 通过 .value修改值
+- 获取 元素或compent const elemRef = ref(null) elemRef 需要和 元素上 ref相同 elemRef.value
+
+- toRef
+- 针对一个响应式对象(reactive 封装)的prop
+- 创建一个 ref 具有响应式
+- 两者保持引用关系
+
+- toRefs
+- 将响应式对象(reactive)转换为普通对象
+- 对象的没个prop都是对应的ref
+- 两者保持引用关系
+
+- cosnt state = reactive({age:20,name:"双越"})
+- return { ...state}
+- 这样解构 会失去响应式
+- toRefs 可以解决这个问题
+
+- 合成函数
+
+```
+function useFeatureX(){
+   const state = reactive({
+     x:1,
+     y:2
+   })
+   // 逻辑运行
+   // 返回时 转换为 ref
+   return toRefs(state)
+}
+
+// 使用
+
+// 不解构 使用时 会 state.x  state.y 比较麻烦
+const { x,y} = useFeatureX()
+
+
+
+```
+
+- 用 reactive做 对象的响应式 用 ref 做值 类型响应式
+- setup中返回 toRefs(state) 或 toRef(state,'xxx')
+- ref的变量命名都用 xxxRef
+- 合成函数返回响应式对象时 使用 toRefs 避免 对象层级太深 或 ref 需要 .value
+
+- 为何需要 ref
+  - 返回值类型,会丢失响应式
+  - 在 setup computed 合成函数 中都可能会返回值类型
+  - Vue 如不定义 ref 用户将自造 ref 反而混乱
+  - Proxy 对象用于创建一个对象的代理，从而实现基本操作的拦截和自定义（如属性查找、赋值、枚举、函数调用等 mdn
+  - Vue.js 3.x 中使用 ref 函数是为了解决基本类型数据无法实现响应式更新的问题。这是因为基本类型的数据没有 getter 和 setter 方法，无法被劫持，因此需要将基本类型的数据包装成一个对象，再使用 Proxy 对象来实现对这个对象的监控和响应式更新。
+  - 值传递 引用传递
+- 为何需要 .value
+  - ref是一个对象 不丢失响应式 value存储值
+  - 通过 .value 属性的 get set实现响应式
+  - 用于模版 reactive 不需要 .value 其他情况都需要
+- 为何需要 toRef toRefs
+  - 初衷: 在不丢失 响应式的情况下 分解或拆散
+  - 前提 针对的是响应式对象 reactive封装 非普通对象
+  - 注意 不创造响应式 而是延续响应式
+
+5. Vue3升级了哪些重要功能
+
+- https://v3-migration.vuejs.org/zh/
+- createApp
+- emits属性
+- 生命周期
+- 多事件
+- Fragment
+- 移除 .sync
+- 异步组件写法
+- 移除 filter
+- Teleport
+- Suspense
+- Composition API
+
+6. Composition API如何实现代码逻辑复用
+7. Vue3如何实现响应式
+8. watch watchEffect的区别
+9. setup中如何获取组件实例
+10. Vue3 为何比 Vue2快
+11. Vite是什么
+12. Composition API 和 React HooKs的对比
 
 ## Vue.js3.0组件的实现原理 响应式原理 Composition API的实现原理
 
@@ -403,4 +698,7 @@ export default {
 
 - vue3
 - 低代码
+
+```
+
 ```

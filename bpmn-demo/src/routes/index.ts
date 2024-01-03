@@ -9,6 +9,7 @@ const routes = [
   { path: "/basic", component: import("../pages/basic.vue") },
   { path: "/axios", component: import("../pages/axios.vue") },
   { path: "/save", component: import("../pages/save.vue") },
+  { path: "/vue3Demo", component: import("../pages/vue3Demo.vue") },
 ];
 
 // 3. 创建路由实例并传递 `routes` 配置
