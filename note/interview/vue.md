@@ -652,23 +652,175 @@ const { x,y} = useFeatureX()
 - https://v3-migration.vuejs.org/zh/
 - createApp
 - emits属性
+  - 为了在声明 props 和 emits 选项时获得完整的类型推导支持,我们使用 defineProps defineEmits API
 - 生命周期
 - 多事件
+  - @click="one($event),two($event)"
+  - methods里定义 one two 两个函数
 - Fragment
+  - 无需单一根节点包裹子节点
 - 移除 .sync
+- v-model 参数 vue3
 - 异步组件写法
+  - vue2 import
+  - vue3 defineAsyncComponent
 - 移除 filter
 - Teleport
+  - 把 元素放置到 某些元素上 to="body" 例如 modal
 - Suspense
+
+```
+<Suspense>
+ <template>
+   <Test1/> <!-- 一个异步组件-->
+ </template>
+ <!-- #fallback 就是一个具名插槽 即 Suspense 组件内部有两个 slot 其中一个具名为 fallback -->
+ <template #fallback>
+   loading
+ </template>
+<Suspense/>
+
+```
+
 - Composition API
+  - reactive
+  - ref 相关
+  - readonly
+  - watch watchEffect
+  - setup
+  - 生命周期钩子函数
+
+```
+// vue2.x
+const app = new Vue（{})
+Vue.use()
+Vue.mixin()
+Vue.component()
+Vue.directive()
+
+// vue3
+
+const app = Vue.createApp()
+app.use()
+app.mixin()
+app.component()
+app.directive()
+
+```
 
 6. Composition API如何实现代码逻辑复用
+
+- 抽离逻辑代码到一个函数 状态和 方法 统一逻辑在一起
+- 函数命名约定为 useXxx格式 React Hooks
+- 在 setup引用 useXxx格式
+
 7. Vue3如何实现响应式
+
+- Object.defineProperty的缺点
+- 深度监听需要一次性递归
+- 无法监听新增属性/删除属性 (Vue.set Vue.delete)
+- 无法原生监听数组 需要特殊处理
+
+- Proxy 基本应用
+
+  - Reflect的作用
+  - 和 Proxy 功能一一对应
+  - 规范化 标准化 函数式
+  - 替代掉 Object上的工具函数
+
+- Proxy 只有在 get的时候才递归
+- Vue2 一次性
+- 深度监听 性能更好
+- 可监听 新增/删除属性
+- 可监听数组变化
+
+- Proxy无法兼容所有浏览器 无法 polyfill
+
+```
+const data = {
+   name:"zhangsan",
+   age:20
+}
+
+const proxyData = new Proxy(data,{
+  get(target,key,receiver){
+    // 只处理本身的属性
+    const ownKeys = Reflect.ownKeys(target)
+    if(ownKeys.includes(key)){
+      console.log('get',key)
+    }
+    const result = Reflect.get(target,key,receive)
+    console.log('get',key)
+    return result
+  },
+  set(target,key,receiver){
+    // 重复的数据 不处理
+    const oldVal = target[key]
+    if(val === oldVal){
+      return true
+    }
+    const ownKeys = Reflect.ownKeys(target)
+    if(ownKeys.includes(key)){
+      console.log('已有的key',key)
+    }else{
+      console.log("新增的key",key)
+    }
+    const result = Reflect.set(target,key,val,receiver)
+    console.log('set',key,val)
+    return result
+  },
+  deleteProperty(target,key){
+    const result = Reflect.deleteProperty(target,key)
+    console.log('delete property',key)
+    return result
+  }
+})
+
+```
+
 8. watch watchEffect的区别
-9. setup中如何获取组件实例
+
+- 两者都可以监听 data 属性变化
+- watch需要明确监听哪个属性
+- watchEffect会根据其中的属性 自动监听其变化
+- watchEffect 初始化会执行一次 收集要监听的数据
+
+9. setup中如何获取组件实例 beforeCreate create
+
+- setup 和 其他 Composition API中没有this
+- 可通过 getCurrentInstance 获取当前实例
+- 若使用 Options API 可照常使用 this
+
 10. Vue3 为何比 Vue2快
+
+- Proxy 响应式
+- PatchFlag
+  - 编译模版时 动态节点做标记
+  - 标记 分为 不同的类型 如 text props
+  - diff算法时 可区分静态节点 以及不同类型的动态节点
+- hoistStatic
+  - 将静态节点的定义 提升到父作用域 缓存起来
+  - 多个相邻的静态节点 会被合并起来
+  - 典型的拿空间换时间的优化策略
+- cacheHandler
+  - 缓存事件
+- SSR优化
+  - 静态节点直接输出 绕过了 vdom
+  - 动态节点 还是需要动态渲染
+- tree-shaking
+  - 编译时 根据不同的情况 引入不同的API
+
 11. Vite是什么
+
+- 开发环境使用 ES6 Module 无需打包 -- 非常快
+- 生产环境使用 rollup 并不会快很多
+
 12. Composition API 和 React HooKs的对比
+
+- 前者setup只会被调用一次 而后者函数会被多次调用
+- 前者无需 useMemo useCallback setup只调用一次
+- 前者无需顾虑调用顺序 后者需要保证 hooks顺序一致
+- 前者 reactive + ref 比 useState 更难理解
 
 ## Vue.js3.0组件的实现原理 响应式原理 Composition API的实现原理
 
