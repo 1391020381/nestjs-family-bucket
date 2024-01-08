@@ -347,3 +347,231 @@ function Project(){
 }
 
 ```
+
+# React 原理
+
+1. 函数式编程 不可变值 setState 不修改原有值 redux action reducer 直接返回新值
+2. vdom diff
+   - h 函数
+   - vnode 数据结构
+   - path 函数
+   - 只比较同一层级 不跨级比较
+   - tag 不相同 则直接删掉重建 不再深度比较
+   - tag key 两者都相同 则认为是相同节点 不再深度比较。
+   - vue2 vue3 react 三者实现 vdom 细节都不相同
+   - 核心概念和实现思路 都一样
+   - 面试主要考察后者 不用全部掌握细节。
+3. JSX 本质
+   - JSX 等同于 Vue 模版
+   - Vue 模版不是 html
+   - JSX 也不是 JS
+   - React.createElement 即 h 函数 返回 vnode
+   - 第一个参数 可能是组件 也可能是 html tag
+   - 组件名 首字母必须大写 React 规定 html 规定也是小写
+4. 合成事件
+   - 更好的兼容性的跨平台
+   - 挂载 document 减少内存消耗 避免频繁解绑
+   - 方便事件的统一管理 如 事务机制
+   - React17 事件绑定到 root 组件上 有利于多个 react 版本 例如微前端。
+5. setState batchUpdate
+
+   - setState 主流程
+   - batchUpdate 机制
+     - isBatchingUpdates
+     - this.setState(newState)
+     - new State 存入 pending 对列
+     - 是否处于 batch update
+     - Y 保存组件于 dirtyComponents 中 异步
+     - N 遍历所有的 dirtyComponents 调用 updateComponent 同步
+   - 哪些能命中 batchUpdate 机制
+     - 生命周期 和它调用的函数
+     - React 中注册的事件 和它调用的函数
+     - React 可以管理 的入口
+   - 哪些能不能命中 batchUpdate 机制
+     - setTimeout setInterval 等 和它 调用的函数
+     - 自定义的 dom 事件 和它调用的函数
+     - React 管不到的入口
+   - transaction 事务机制
+     - 在执行函数的时候 先定义开始 函数 在定义结束 类似 下面伪代码
+
+```
+// 开始 处于 batchUpdate
+// isBatchingUpdates = true
+
+this.setState({
+   count:this.state.count + 1
+})
+// 结束
+isBatchingUpdates = false;
+
+
+
+// 自定义dom事件类似 setTimeout
+// 开始 处于 batchUpdate
+// isBatchingUpdates = true
+
+setTimeout(()=>{
+   // 此时 isBatchingUpdate 是 false
+   this.setState({
+      count:this.state.count +1
+   })
+})
+// 结束
+isBatchingUpdates = false;
+
+
+```
+
+6. 组件渲染过程
+
+   - JSX 如何渲染为页面
+   - setState 之后如何更新页面
+   - 面试考察全流程
+   - dirtyComponents
+
+   - 组件渲染和更新过程
+     - props state
+     - render() 生成 vnode
+     - path(elem,vnode)
+   - 更新的两个阶段
+     - setState(newState) --> dirtyComponents （可能有的子组件）
+     - render() 生成 newVnode
+     - path(vnode,newVnode)
+   - React fiber
+
+     - path 被拆分为两个阶段
+     - reconciliation 阶段 执行 diff 算法 纯 JS 计算
+     - commit 阶段 将 diff 结果渲染 dom。
+
+     - js 是 单线程 且和 dom 渲染共用一个线程
+     - 当组件足够复杂 组件更新时计算和渲染都压力大
+     - 同时再有 dom 操作需求 动画 鼠标拖拽 将卡顿
+
+     - 将 reconciliation 阶段进行任务拆分 commit 无法拆分 commit 是浏览器渲染
+     - Dom 需要渲染时暂停 空闲时恢复
+     - window.requestIdleCallback
+
+# React Hooks
+
+# React 面试题
+
+1. 组件之间如何通讯
+   - 父子组件 props
+   - 自定义事件
+   - Redux Context
+2. JSX 本质是什么
+   - React.createElement
+   - 返回 vnode
+3. Context 是什么 如何应用
+
+- 父组件 向其下所有子组件传递信息
+- 如一些简单的公共信息 主题色 语言
+- 复杂的公共信息 redux
+
+4. shouldComponentUpdate 用途
+
+- 性能优化
+- 配置 不可变值 一起使用 否则会出错
+
+5. redux 单项数据流
+
+- UI(state) -> dispatch(action) -> reducer -> state
+
+6. setState 场景题
+
+- 异步
+- 合并
+- 同步
+
+7. 什么是纯函数
+
+- 返回一个新的值 没有副作用 不会 偷偷 修改其他值
+- 不可变值
+
+8. react 组件生命周期
+
+- 单组件生命周期
+- 父子组件
+- SCU
+
+8. ajax 放在 react 哪个生命周期
+
+- 同 vue
+- componentDidMount dom 渲染完。 js 单线程, 加载页面会渲染 ,然后执行了生命周期,会执行到 ajax(异步) 也是会在浏览器渲染完页面 才会被执行
+
+9. 渲染列表 为何使用 key
+
+- 同 vue 必须用 key 且不能使用 index reandon
+
+- tag
+- tag key
+- diff 减少渲染次数 提升渲染性能
+
+10. 函数组件 和 class 组件区别
+
+- 纯函数 输入 prosp 输出 JSX
+- 没有实例 没有生命周期 没有 state
+- 不能扩展其他方法
+
+11. 什么是受控组件
+
+- 表单的值 受 state 控制
+- 需要自行监听 onChange 更新 state
+- 对比 受控组件
+
+12. 何时使用异步组件
+
+- 同 vue
+- 懒加载
+- 路由
+
+13. 多个组件公共逻辑 如何抽离
+
+- HOC
+- Render Props
+
+14. redux 如何异步请求
+
+- 使用 异步 action
+- redux-thunk
+
+15. react-router 如何配置懒加载
+
+- React.lay(()=>import(".../home"))
+- <Suspense fallback={}></Suspense>
+
+16. PureComponent 有区别
+
+- 实现了浅比较的 shouldComponentUpdate
+- 优化性能
+- 不可变值
+
+17. React 事件 和 dom 事件区别
+
+- 所有事件挂载 documnet 上 react17 root 组件
+- event 不是原生事件 是合成事件对象
+- dispatchEvent
+
+18. React 性能优化
+
+- 渲染列表时加 key
+- 自定义事件 dom 事件及时销毁
+- 合理使用异步组件
+- 减少函数 bind this 的次数
+- 合理使用 SCU PureComponent memo
+- 合理使用 Immutable.js
+- webpack 层面
+- 前端通用的性能优化 图片懒加载
+- SSR
+
+19. React 和 Vue 的区别
+
+- 都支持组件化
+- 都是支持数据驱动视图
+- 都使用 vdom 操作 dom
+
+- React 使用 JSX 拥抱 JS Vue 使用模版拥抱 html
+- React 函数式编程 Vue 声明式编程
+- React 更多需要自力更生 js 表达式 循环 SCU Vue 把想要的都给你 computer watch v-if 等
+
+- 在业务使用 需要考虑其他情况 公司技术栈
