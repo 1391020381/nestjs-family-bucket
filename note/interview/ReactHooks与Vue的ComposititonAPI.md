@@ -210,4 +210,104 @@ function useAxios(url){
 - 只能用于顶层代码 不能在循环 判断中使用 hooks
 - eslint 插件 eslint-plugin-react-hooks
 
+8. 为何Hooks要依赖调用顺序
+
+- 无论 reder 还是 re-render hooks 调用顺序必须一致
+- 如果 hooks出现在循环 判断里 则无法保证顺序一致
+- hooks严重依赖调用顺序 重要
+
+```
+function Teach({couseName}){
+  // 函数组件 纯函数 执行完即销毁
+  // 所以 无论组件初始化 render 还是组件更新 render
+  // 都会重新执行一次这个函数 获取最新的组件
+  // 这一点 和 class组件不一样
+
+  // render 初始化 state的值不一样 '张三'
+  // re-render 读取 state的值 张三
+  // state变量 一一对应  是靠顺序保证的。
+  const [studentName,setStudentName] = useState('张三')
+  const [teacherName,setTeacherName] = useState('双越')
+
+  // render 添加 effect函数
+  // re-render  替换 effect函数 内部函数也会重新定义
+  useEffect(()=>{
+    localStorage.setItem('name',studentName)
+  })
+  useEffect(()=>{
+    console.log(`${teacherName}开始上课 学生 ${studentName}`)
+  })
+
+  return <div>
+    课程 {couseName}
+    讲师 {teacherName}
+    学生 {studentName}
+  </div>
+}
+
+```
+
+9. class组件逻辑复用
+
+- mixin 早已经废弃
+  - 变量作用域来源不清
+  - 属性重名
+  - 引入过多 会导致顺序冲突
+- HOC
+  - 组件层级嵌套过多 不易渲染 不易调试
+  - 父组件 属性劫持 ...this.props mouse={this.state.mouse}
+- render prop
+  - 给组件传递 render(函数组件)
+  - 在 组件内部调用 render 进行渲染
+  - 理解不容易
+  - render 函数组件 功能单一
+
+10. hooks逻辑复用
+
+- 完全符合 hooks原有的原则 没有其他要求 易理解记忆
+- 变量作用域明确
+- 不会产生组件嵌套
+
+11. Hooks使用注意事项
+
+- useState初始化 只有第一次有效
+  - 通过props 初始化 state 与 直接使用 props
+  - render 初始化 state
+  - rerender 只恢复初始化的 state值 不会再重新设置新的值 只能用 setXXX 来修改
+- useEffect 内部不能修改state
+  - 可以使用 非 state 值来自增
+  - const countRef = useRef(0) countRef.current
+  - 依赖为 [] 时 re-render不会重新执行 effect函数
+  - 没有依赖 re-render 会重新执行 effect函数 会重新拿到 新 state
+- useEffect可能出现死循环
+  - 依赖里有 {} []引用类型
+  - 依赖变化是通过 Object.is({},{})
+
+12. 为什么有 react hooks 解决了什么问题
+
+- 完善函数组件的能力 函数更适合 react组件
+- 组件逻辑复用 hooks表现更好
+- class 复杂组件正在变的费解 不易测试 逻辑混乱
+  - 逻辑散落在各处 DidMout DidUpdate 中获取数据
+  - DidMout 绑定事件 WillUnMount解绑事件
+  - 使用Hooks 相同逻辑可分割到一个一个的 useEffect
+
+13. react hooks模拟组件生命周期
+
+- 模拟 componentDidMount useEffect 依赖 []
+
+- 模拟 componentDidUpdate useEffect 无依赖 或依赖某些[a,b]
+- 模拟 componentWillUnMount useEffect 返回一个函数
+- useEffect 依赖[] 组件销毁是执行 fn 等于 WillUnMount
+- useEffect无依赖或依赖[a,b] 组件更新时执行fn
+- 即 下一次执行 useEffect之前 就会执行 fn 无论 更新卸载
+
+14. 如何自定义Hook
+
+15. React hooks 性能优化
+
+- useMemo 缓存数据
+- useCallback 缓存数据
+- 相当于 SCU PureComponent
+
 # Vue Compoition API
