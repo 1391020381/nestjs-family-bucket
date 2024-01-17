@@ -1,4 +1,4 @@
-1. Vue.js 3.x组件库开发要点
+#  Vue.js 3.x组件库开发要点
     - monorepo管理组件代码
         - 基础组件
         - 业务组件
@@ -110,3 +110,16 @@ export default Counter;
 
 
 ```
+
+
+# monorepo管理组件代码
+
+# Vue3组件库开发模式
+* pnpm 支持本地调试 component business
+
+# Vue3打包
+* components business css 每个组件都有单独 index.ts 文件   也有一个 组件和 CSS统一导出入口 
+1. components business
+    - 递归 components/business 中组件 使用 Rollup 打包
+2. css
+3. dts  TS类型
