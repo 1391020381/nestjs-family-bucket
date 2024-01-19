@@ -334,3 +334,52 @@ for(var i = 1;i <= 5;i++){
 # 异步编程
 
 # JS引擎
+
+
+# 箭头函数
+1. 箭头函数有什么缺点
+  - 没有arguments
+  - 无法改变this    箭头函数this是父作用域的this
+  - 某些箭头函数比较难理解
+2. 什么时候不能使用箭头函数
+  - 对象方法
+  - 原型方法
+  - 构造函数
+  - 动态上下文中的回调函数  事件回调
+  - Vue生命周期 和 methods  vue组件本质是对象  react组件(非hooks) 是 class
+```
+const obj = {
+  name:"双越",
+  getName:()=>{
+    return this.name
+  }
+}
+
+class Foo{
+  constructor(name,city){
+    this.name = name;
+    this.city = city
+  }
+  getName = ()=>{
+    return this.name
+  }
+}
+  const f = new Foo('双越','北京')
+  
+```
+
+# js严格模式特点
+1. 全局变量必须先声明
+2. 禁止使用 with
+3. 禁止创建eval作用域
+4. 禁止 this指向 window
+5. 函数参数不能重复
+```
+"use strict"
+
+function fn(){
+  "use strict"
+}
+
+
+```
