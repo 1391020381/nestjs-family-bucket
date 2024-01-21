@@ -383,3 +383,141 @@ function fn(){
 
 
 ```
+
+
+# JS内存垃圾回收
+1. 引用计数(之前)  循环引用
+2. 标记清楚 (现代)  js 循环 window对象看是否可以找到
+
+* 闭包是内存泄漏吗？  内存泄漏是非预期  闭包的数据不能被垃圾回收
+
+# js内存泄漏如何检测？ 场景有哪些？
+* 被全局变量 函数引用 组件销毁时未清除
+* 被全局事件 定时器引用  组件销毁时未清除
+* 被自定义事件引用 组件销毁时未清除   event-emitter
+
+
+* WeakMap WeakSet   key 只能是引用类型
+
+
+# 浏览器和nodejs的事件循环有什么区别
+
+## 宏任务和微任务
+* 宏任务 setTimeout setInterval 网络请求
+* 微任务 promise async await
+* 微任务在下一轮dom渲染之前执行 宏任务之后执行。
+
+
+## nodejs异步 
+* Nodejs同样适用ES语法 也是单线程 也需要异步
+* 异步任务也分 宏任务  + 微任务
+
+* 但是 它的宏任务 和 微任务 分不同的类型 有不同的优先级
+
+* 宏任务
+  - Timers setTimeout setInterval
+  - I/O callbacks 处理网络 流 TCP的错误回调
+  - Idle prepare 闲置状态(nodejs内部使用)
+  - Poll轮询 执行poll中的 I/O 队列
+  - Check 检查 存储setImmediate回调
+  - Close callbacks 关系回调 如 socket.on('close')
+* 微任务
+  - promise async/await process.nextTick
+  - process.nextTick 优先级最高  
+* 执行同步代码  执行微任务   按顺序执行6个类型的宏任务(每个执行结束时都执行当前的微任务) 
+```
+const p = document.createElement('p');
+p.innerHTML = "new paragraph";
+document.body.appendChild(p)
+const list = document.getElementsByTagName('p');
+console.log('length----',list.length);
+
+console.log('start');
+
+setTimeout(()=>{
+  const list = document.getElementsByTagName('p')
+  console.log('length on timeout ---',list.length)
+  alert('阻塞 timeout')
+})
+Promise.resolve().then(()=>{
+  const list = document.getElementsByTagName('p');
+  console.log('length on promise.then-----',list.length)
+  alert('阻塞 promsie')
+})
+console.log('end')
+```
+
+
+* 浏览器和nodejs的 eventloop流程基本相同
+* nodejs宏任务和微任务分类型 有优先级
+* 推荐使用 setImmediate 代替 process.nextTick
+
+
+
+# vdom真的很快嘛
+* 用js对象模拟dom节点数据
+
+## Vue React框架的价值
+* 组件化
+* 数据视图分离  数据驱动视图
+* 只关注业务数据 而不用关心dom变化
+
+
+* vdom并不快 js直接操作dom 相对 vdom 更快 省掉了 中间 vdom 对比的过程
+* 但 数据驱动视图 要更合适的技术方案 不能全部dom重建。  在 全链路 开发维护来看  vdom 模式 也就是 vue react 更快。
+
+* svelte 就不用 vdom
+
+
+# 遍历 数组 for 和 forEach 哪个快
+* for更快
+* forEach 每次都要创建一个函数来调用 而 for不会创建函数
+* 函数需要独立的作用域 会有额外开销
+* 越 低级 的代码 性能往往越好
+* 日常开发别只考虑性能 forEach代码可读性更好
+
+* 循环 递归  递归每次都要创建函数  而循环不会
+
+
+
+# 什么是 JS Bridge
+* js无法直接调用 native api
+* 需要通过一些特定的格式 来调用。
+* 这些 格式 就统称 JS-Bridge 例如微信 JSSDK
+
+## JS Bridge 的常见实现方式
+1. 注册全局API
+2. URL Scheme 
+
+#  requestIdleCallback  requestAnimationFrame 区别
+
+* React fiber 引起的关注
+
+* 组件转换链表 可分段渲染
+* 渲染时可以暂停 去执行其他高优任务 空闲时再继续渲染
+* 如何判断空闲  requestIdleCallback
+
+
+* requestAnimationFrame 每次(帧)渲染完都会执行 高优
+* requestIdleCallback 空闲时才会执行 低优
+
+
+```
+const box = document.getElementById("box");
+document.getElementById("btn1").addEventListener("click",()=>{
+  let curWidth = 100;
+  const maxWidth = 400
+  functin addWitdh(){
+    curWidth = curWidth + 3;
+    box.style.width = `${curWidth}px`;
+    if(curWidth < maxWidth){
+      window.requestAnimationFrame(addWidth)
+     //  window.requestIdleCallback(addWidth)
+    }
+  }
+  addWidth()
+})
+
+```
+
+* 都是宏任务 都是要 dom渲染完执行
