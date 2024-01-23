@@ -854,3 +854,82 @@ const proxyData = new Proxy(data,{
 ```
 
 ```
+
+
+
+# 在组件外是store  Pinia 
+
+
+```
+// store/index.ts
+import { createPinia } from 'pinia';
+const store = createPinia();
+export default store;
+
+// main.ts
+
+import store from './store';
+
+app.use(store);
+
+
+// request.ts
+
+import store from '@/store';
+
+import useTheme from '@/store/theme';
+
+const themeStore = useTheme(store);
+
+export function useWxShare() {
+  const { initConfig, setShareInfo } = useWxSDK();
+  const shareUrl = window.location.href.split('#')[0];
+  const newShareUrl = appendExtParams(window.location.href);
+  const wxShare = () => {
+    getJssdk({ url: shareUrl }).then((config: any) => {
+      // 调用后端接口获取config相关信息
+      const configParams = config.data || {};
+      initConfig(configParams).then(() => {
+        // 注入wx.config成功后，设置微信分享相关
+        const themeStore = useTheme(store);
+        const shareData = computed(() => themeStore.shareData);
+        if (window.__baseParams.pageId == 'preview') {
+          setShareInfo({
+            title: shareData.value.title || DEFAULT_SHARE_TITLE,
+            desc: shareData.value.content || DEFAULT_SHARE_CONTENT,
+            imgUrl: shareData.value.image || DEFAULT_SHARE_IMAGE,
+            link: newShareUrl,
+          });
+        } else {
+          getShareDetail({ page_id: window.__baseParams.pageId })
+            .then((shareDetail: any) => {
+              console.log('shareDetail:', shareDetail);
+              // 初始化装修
+              // themeStore.initThemeData(templateDetail.data);
+              const shareData = shareDetail.data?.share_data || {};
+              setShareInfo({
+                title: shareData.title || DEFAULT_SHARE_TITLE,
+                desc: shareData.content || DEFAULT_SHARE_CONTENT,
+                imgUrl: shareData.image || DEFAULT_SHARE_IMAGE,
+                link: newShareUrl,
+              });
+            })
+            .catch((err) => {
+              // 接口异常兜底
+              setShareInfo({
+                title: DEFAULT_SHARE_TITLE,
+                desc: DEFAULT_SHARE_CONTENT,
+                imgUrl: DEFAULT_SHARE_IMAGE,
+                link: newShareUrl,
+              });
+            });
+        }
+      });
+    });
+  };
+  return {
+    wxShare,
+  };
+}
+
+```
