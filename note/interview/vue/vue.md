@@ -858,6 +858,53 @@ const proxyData = new Proxy(data,{
 
 
 # 在组件外是store  Pinia 
+ - pinia 相比 vuex4  对于 vue3的兼容性更好
+ - pinia 相比 vuex4  具备完善的 类型推导
+ - pinia 核心概念 
+   - state 
+   - actions
+   - getters
+* 也存在另一种定义 store 的可用语法。与 Vue 组合式 API 的 setup 函数 相似，我们可以传入一个函数，该函数定义了一些响应式属性和方法，并且返回一个带有我们想暴露出去的属性和方法的对象。
+
+* [Setup Store](https://pinia.vuejs.org/zh/core-concepts/#setup-stores)
+
+```
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+
+const useLoading = defineStore('loading', () => {
+  const loading = ref(false);
+  function showLoading() {
+    loading.value = true;
+  }
+  function hideLoading() {
+    loading.value = false;
+  }
+  return {
+    loading,
+    showLoading,
+    hideLoading,
+  };
+});
+export default useLoading;
+
+
+// request.ts
+
+const loadingStore = useLoading(store);
+
+function startLoading() {
+  loadingStore.showLoading();
+}
+
+function endLoading() {
+  loadingStore.hideLoading();
+}
+
+```
+
+
+
 
 
 ```
