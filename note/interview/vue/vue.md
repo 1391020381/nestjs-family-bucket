@@ -904,9 +904,6 @@ function endLoading() {
 ```
 
 
-
-
-
 ```
 // store/index.ts
 import { createPinia } from 'pinia';
@@ -980,3 +977,26 @@ export function useWxShare() {
 }
 
 ```
+
+
+ * vue3定义 name
+ 1. 自动生成
+ 2. 再开启一个 script用来定义name
+ 3. unplugin-vue-define-options
+
+ * Vue3怎么让全局组件有提示
+
+ ```
+// 在src目录下新建一个文件 global.d.ts
+import XtxSkeleton from '@/components/XtxSkeleton/XtxSkeleton.vue'
+// 参考：
+declare module 'vue' {
+  export interface GlobalComponents {
+    XtxSkeleton: typeof XtxSkeleton
+  }
+}
+export {}
+
+
+
+ ```
