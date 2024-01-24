@@ -55,6 +55,14 @@
         }
         const f = new Foo('双越', '北京')
         console.log( f.getName() )
+        function walk(fn,daly){
+    return  new Promise((resolve,reject)=>{
+        setTimeout(function(){
+             fn();
+             resolve()
+        },daly)
+    })
+ }
     </script>
 </body>
 </html>
