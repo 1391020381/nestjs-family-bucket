@@ -11,3 +11,26 @@
 除了主版本号、次版本号和修订版本号，还有一些其他的版本号格式和标识符，例如预发布版本号（如 alpha、beta、rc 等）、构建版本号（如 build number）等。这些版本号通常用于软件开发过程中的测试、构建和发布等环节中。
 
 总之，版本号是软件开发中非常重要的一种标识符，它可以让用户和开发者了解软件的更新和改变，从而更好地使用和维护软件。
+
+
+
+# 硬连接
+# 软连接
+* pnpm store path
+* pnpm add 
+* 非扁平化的形式
+    - bar@1.0.0
+    - .pnpm 
+        - foo@1.0.0
+        - foo@2.0.0
+        - bar@1.0.0
+            - node_modules
+                - foo@1.0.0
+                - bar@1.0.0
+
+
+* bar1.0.0 通过软连接的方式 执行 .pnpm  里层 bar@1.0.0
+* bar@1.0.0 里层的 foo@1.0.0 软连接到 pnpm外层的 foo@1.0.0              
+* vue 软连接的方式指向了 .pnpm 下面的 vue   .pnpm/vue 通过 硬连接 指向 全局的  .pnpm store
+
+* [pnpm + monorepo + changeset实现多包管理和发布](https://juejin.cn/post/7181720787400228925)
