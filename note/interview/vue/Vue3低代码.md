@@ -26,3 +26,15 @@
 * 涉及数据敏感 服务器压力的场景 就不合适用SSR。 如果企业内部有专业的数据安全团队和服务运维团队辅助,他们可以支持数据"防爬" 和 服务动态扩容。
     ![SSR-CSR](https://static001.geekbang.org/resource/image/0e/21/0ed73dfe29365a3d17bb10d5d1b0be21.jpg?wh=1920x1080)
     ![SSR-解析](https://static001.geekbang.org/resource/image/be/45/be4917fffe9d1a25db03eb2f085de145.jpg?wh=1920x1080)
+
+
+
+ # 营销活动搭建系统  
+ * 用户 物料 页面 三个维度
+ 1. 组件库  基础组件库  业务组件库  通过组件库来搭建页面
+ 2. 通过vite 等工具 将 组件打包成不同的格式 并 发布到 npm 或 cdn   如果包含路由直接编译组件 然后 拼装页面可行？
+ 3. web后台 涉及到组件的 注册 编辑 列表
+ 4. SSR CSR 通过 页面配置信息 组装页面   注入数据
+
+
+     
