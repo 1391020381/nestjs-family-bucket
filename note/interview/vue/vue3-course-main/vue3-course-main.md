@@ -135,7 +135,7 @@ module.exports = {
 -  monorepo 管理组件代码
 - Vue.js 3.x 源文件的多种模块格式编译
 - 基于Less开发CSS样式文件和独立编译  
-
+* 需要把组件库划分成多个npm 模块进行输出管理,同时需要尽量用一个代码仓库进行维护,
 
 * 在业务组件库 子项目这个npm模块依赖里,我们使用了 基础组件库 子项目模块 "@my/components" 其实 npm站点并不需要存在这个模块,后续通过 pnpm 进行 monoreop的管理，实现项目子依赖模块 @my/components 直接指向和引用 packages/components的代码。
 * 业务组件库子项目（@my/business）里依赖了基础组件库的子项目（@my/components），通过 pnpm 管理的 monorepo 项目方式，将依赖的 @my/components 子项目通过“软链接”形式指向了真正的 components/* 目录。monorepo 里有“软链接”实现子项目的 npm 模块依赖关系，我们就可以放心拆分不同类型组件库，以及管理不同类型组件库的嵌套依赖关系了。
@@ -179,7 +179,7 @@ module.exports = {
 
 ```
 
-### 打包  dts代码  ts类型代码  // 细节？
+### 打包  dts代码  ts类型代码  // 细节？ 打包错误 先忽略
 * vue/compiler-sfc
 * ts-morph
 * vue/compiler-sfc  ts-morph 可以一起使用 以便在处理 Vue.js组件库时自动生成TS类型文件定义。
@@ -187,4 +187,26 @@ module.exports = {
 * ts-morph vue/compiler-sfc 为 Vue3组件库生成类型定义文件
 
 
+# 实战篇
+1. 拖拽
+2. spa
+3. koa  spa
 
+![开发模式](https://static001.geekbang.org/resource/image/97/d6/97c52b5543da5d5bd20f4f5d743967d6.jpg?wh=1920x1080)
+
+![生产模式-打包](https://static001.geekbang.org/resource/image/27/91/272721374ab1yy22ebeec9c6f0933891.jpg?wh=1920x1080)
+![生产模式-运行-前端资源在pubic下, 特定页面输出页面,引用public下资源](https://static001.geekbang.org/resource/image/1d/a4/1d0e7a13651cfbeaff194045fdc1d7a4.jpg?wh=1920x1080)
+
+![SSR-CSR相结合](https://static001.geekbang.org/resource/image/45/fb/45f1a279ff3bbd92be91f6df78d1dafb.jpg?wh=1920x1080)
+![SSR-CSR 编译](https://static001.geekbang.org/resource/image/0e/21/0ed73dfe29365a3d17bb10d5d1b0be21.jpg?wh=1920x1080)
+![页面组装](https://static001.geekbang.org/resource/image/be/45/be4917fffe9d1a25db03eb2f085de145.jpg?wh=1920x1080)
+
+
+* 如何因地制宜Vue.js全栈项目的SSR CSR 结合方案。 核心考虑项目的前后端耦合或者解构的情况,同时还要考虑到前后端分离的技术趋势。 SSR和CSR的设计方案,必须让Vue.js在前后端使用操作上解耦。
+
+
+
+
+# 页面编译和运行 如何设计 Vue.js搭建页面的渲染策略
+
+* 页面 -> 组件(非编译模式) -> 加载页面  ssr结果 -> html（替换 部分）
