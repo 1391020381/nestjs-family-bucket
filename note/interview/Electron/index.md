@@ -116,3 +116,17 @@ console.log(window.myAPI)
 
 ```
 ## Electron 的安全问题
+
+
+
+# Electron-vite 创建工程热更新问题
+* 在使用 electron-vite创建的Electron工程中,如果修改了主进程的代码,通常情况下是不能够实时热更新的。
+* 这是因为Electron的主进程负责管理和创建渲染进程(窗口),而一旦它启动以后,代码已经被加载到内存中了。因此 修改主进程代码后,你需要重启Electron应用来让新的代码生效
+
+* 你在开发过程中,为了提高效率,你可以使用一些工具来帮助你自动重启主进程。
+* 例如 electron-reloader 这样的工具可以检测到主进程代码的变化,并重新启动 Electron应用。这样你就不需要每次都手动重启,但仍需要等待重新启动的过程。
+* 所以 如果你遇到主进程热更新无效的情况,那通常是必须的，你需要重新启动Electron应用以应用新的代码变更。
+
+
+
+* macOS 中应用程序菜单的第一个项目的标签总是你的应用程序的名字，无论你设置什么标签。如果你想展示成自己的标题，Electron 官方给了一种修改 Info.plist 的方法：About Information Property List Files。
