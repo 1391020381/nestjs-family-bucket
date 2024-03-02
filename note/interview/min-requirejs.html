@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>min-requirejs</title>
+</head>
+<body>
+ <script>
+    // 模块的缓存
+var moduleCache = {};
+
+// 定义模块
+function define(moduleName, dependencies, moduleFunction) {
+  if(typeof moduleCache[moduleName] !== 'undefined') {
+    throw new Error(`Module ${moduleName} has already been defined.`);
+  }
+
+  // 新模块
+  moduleCache[moduleName] = {
+    moduleName: moduleName,
+    dependencies: dependencies,
+    moduleFunction: moduleFunction,
+    status: 'Defined',
+    callbacks: [],
+  };
+}
+// 异步加载.js文件
+function loadScript(src, callback) {
+  var script = document.createElement('script');
+  script.src = src + '.js';
+  script.onload = callback;
+  document.body.appendChild(script);
+}
+
+
+// 异步加载和执行模块
+function require(modules, callback) {
+  var exports = []
+
+  // 检查所有模块都已加载，如果是，则执行回调
+  var checkAndRunCallback = function() {
+    if (modules.every(function(moduleName) { return moduleCache[moduleName].status === 'Loaded'; })) {
+      modules.forEach(function(moduleName) {
+        exports.push(moduleCache[moduleName].exports);
+      });
+
+      callback.apply(null, exports);
+    }
+  };
+
+  // 加载所有未加载的模块
+  modules.forEach(function(moduleName){
+    var moduleInfo = moduleCache[moduleName];
+
+    // 如果模块未定义，抛出错误
+    if (typeof moduleInfo === 'undefined') {
+      throw new Error(`Module ${moduleName} has not been defined.`);
+    }
+
+    // 如果模块已加载，然后忽略它，否则，加载它
+    if (moduleInfo.status !== 'Loaded') {
+      moduleInfo.status = 'Loading';
+
+      // 把checkAndRunCallback添加到回调列表，执行后删除
+      moduleInfo.callbacks.push(checkAndRunCallback);
+
+      loadScript(moduleName, function() {
+        // 执行模块的moduleFunction以获得模块的exports
+        var exports = moduleInfo.moduleFunction.apply(null, moduleInfo.dependencies.map(function(dependency) { return moduleCache[dependency].exports; }));
+
+        // 为模块设置exports
+        moduleInfo.exports = exports || {};
+        // 设置模块状态为已加载
+        moduleInfo.status = 'Loaded';
+
+        // 执行所有回调并清空回调列表
+        moduleInfo.callbacks.forEach(function(callback) { callback(); });
+        moduleInfo.callbacks = [];
+      });
+    }
+  });
+}
+
+ </script>
+</body>
+</html>

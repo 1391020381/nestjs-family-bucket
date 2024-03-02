@@ -367,3 +367,53 @@ postMsgToParent({
 # 发布流程设计
 * 页面编译了，编译最终会产生静态文件,这些文件无论我们通过怎么样的方式发布归根结底都是为了将静态文件推到cdn上。
 * 因为本身 server 端的构建就是对已经测试过的页面进行数据注入，并不会影响页面的结构。
+
+
+* @octokit/core 操作git
+
+# coco-h5 一般流程
+1. 发布模版
+    - coco-tempalte
+
+2. coco-web coco-server
+    - coco-web  /home   展示所有发布的模版    template  
+    - 创建项目
+    - 用户选择某个模版,添加 项目名称 和 项目路径  创建项目 project   octokit 操作在组织下创建项目  返回 {id: 760374446，ssh_url:'git@github.com:justdoit-h5/activity-test-240220-1753.git'}
+    - renderTpl
+      - coco-server /static目录下 是否有这个project
+      - 下载模版的项目  download-git-repo
+      - 注入数据  index.html  fs读取文件 res =  fs.readFileSync  然后替换 res.replace   fs.writeFileSync(`${temp_dest}/dist/index.html`, target)
+      - release   process.execSync(
+      `cd static/${repoName}/dist &&
+       git init &&
+        git remote add origin ${repoUrl} &&
+       git add -A &&
+       git commit -m 'deploy' &&
+       git push -f ${repoUrl} master:gh-pages &&
+       cd -`
+    )
+      - 依赖 部署 coco-server 机器的 git信息
+      - 可以在 git init git add -A  前添加如下两行代码来设置当地仓库的用户信息
+      - git config user.name "Your Name"
+      - git config user.email "your.email@example.com"
+    - 编辑项目 
+      - coco-web  编辑器操作
+      - coco-template iframe  展示页面 然后向上告诉编辑器 消息
+      - edit project.query({id:router.query.id})  component.query() 
+```
+// project 
+
+pageConfig = {
+              config: {
+                templateId: state.pageInfo.id,
+                templateGit: state.pageInfo.gitUrl,
+                templateName: state.pageInfo.name,
+                projectName: pageState.projectName || '未命名的页面',
+                gitName: pageState.gitName,
+                templateVersion: state.pageInfo.version,
+              },
+              userSelectComponents: [],
+              components: [],
+            }
+
+```
