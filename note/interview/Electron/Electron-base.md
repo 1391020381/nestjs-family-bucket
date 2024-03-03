@@ -94,3 +94,170 @@ ipcMain.handle('invoke', async (evnet, message) => {
 6. 应用程序上的差异 macos 未签名的应用会面临一些安全提示会限制。
 7. 申请管理员权限  https://github.com/codebytere/node-mac-permissions
 ## 菜单和托盘
+1. 应用内菜单  mac顶部菜单  
+```
+import { Menu } from 'electron'
+
+function createMenu () {
+  const template = [
+    {
+      label: '菜单一',
+      submenu: [
+        {
+          label: '功能一'
+        },
+        {
+          label: '功能二'
+        }
+      ]
+    },
+    {
+      label: '菜单二',
+      submenu: [
+        {
+          label: '功能一'
+        },
+        {
+          label: '功能二'
+        }
+      ]
+    }
+  ];
+  if (process.platform === 'darwin') {
+  template.unshift({
+    label: app.getName(),
+    submenu: [
+      {
+        label: 'Quit',
+        click() {
+          app.quit();
+        }
+      }
+    ]
+  });
+}
+
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
+}
+
+
+
+```
+2. 上下文菜单  (Electron应用内部)
+3. Dock菜单    （仅仅MacOS可用）
+
+```
+
+// main.js
+const createDockMenu = () => {
+  const dockTempalte = [
+    {
+      label: '菜单一',
+      click () {
+        console.log('New Window');
+      }
+    }, {
+      label: '菜单二',
+      submenu: [
+        { label: 'Basic' },
+        { label: 'Pro' }
+      ]
+    },
+    {
+      label: '其他...'
+    }
+  ];
+
+  const dockMenu = Menu.buildFromTemplate(dockTempalte);
+  app.dock.setMenu(dockMenu);
+}
+
+
+```
+4. 应用托盘
+
+```
+// 主进程
+import {app, Menu, Tray} from 'electron';
+
+let tray = new Tray('public/icon.ico');
+const contextMenu = Menu.buildFromTemplate([
+  {
+    label: '退出',
+    click: function(){
+      app.quit();
+    }
+  }
+]);
+tray.setToolTip('应用标题');
+tray.setContextMenu(contextMenu);
+
+
+
+
+```
+
+# 自定义窗口
+1. 无边框窗口的拖拽
+
+```
+// main.js
+const { BrowserWindow } = require('electron')
+const win = new BrowserWindow({ frame: false })
+
+
+<body style="-webkit-app-region: drag">
+   <button style="-webkit-app-region: no-drag;">click</button>
+</body>
+
+// 如果你需要整个窗口所有区域都支持拖拽。做不到。
+```
+
+# 自定义窗口标题栏
+
+```
+new BrowserWindow({
+  width: 800,
+  height: 600,
+  titleBarStyle: 'hidden',
+  // 在windows上，设置默认显示窗口控制工具
+  <!-- titleBarOverlay: { color: "#fff", symbolColor: "black", } -->
+  titleBarOverlay:"hidden",
+  show:false
+});
+// 渲染进程自己画一个标题栏
+// 最后渲染进程中通过 ipcRenderer向主进程中发送操作事件。
+
+// 最小化
+const minimize = () => {
+  ipcRenderer.send('detach:service', { type: 'minimize' });
+};
+// 最大化
+const maximize = () => {
+  ipcRenderer.send('detach:service', { type: 'maximize' });
+};
+// 关闭窗口
+const close = () => {
+  ipcRenderer.send('detach:service', { type: 'close' });
+};
+
+ipcMain.on('detach:service', async (event, arg: { type: string }) => {
+  operation[arg.type]();
+});
+
+const operation = {
+  minimize: () => {
+    win.focus();
+    win.minimize();
+  },
+  maximize: () => {
+    win.isMaximized() ? win.unmaximize() : win.maximize();
+  },
+  close: () => {
+    win.close();
+  },
+};
+
+
+```
