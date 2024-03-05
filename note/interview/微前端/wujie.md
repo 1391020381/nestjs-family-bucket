@@ -55,4 +55,5 @@
     - 一个微前端系统可能同时运行多个子应用 不同子应用之间可能存在相同的包依赖,那么这个依赖就会在不同的子应用中重复打包 重复执行造成性能和内存的浪费
     - import Antdt from 'ant-design-vue'  window.Antdv = Antdv
 * [微前端（无界）](https://juejin.cn/post/7212603829572911159)
-* [webcomponent](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components)      
+* [webcomponent](https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components)
+* [wujie微前端原理](https://zhuanlan.zhihu.com/p/442815952)    
