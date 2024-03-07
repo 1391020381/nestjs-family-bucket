@@ -105,3 +105,33 @@ export default MyAxios;
 
 
 ```
+
+* 例如轮询订单接口
+
+```
+
+import http from './http'; // 我们假设http.js是你axios的封装
+
+async function checkOrderStatus(orderId, delay = 2000) {
+  try {
+    const response = await http.get(`/order-status-api-path?orderId=${orderId}`);
+    const status = response.data.status;
+    if (status === 'processing') {
+      console.log('订单正在处理中...');
+      setTimeout(() => checkOrderStatus(orderId, delay), delay);
+    } else if (status === 'completed') {
+      console.log('订单处理完成!');
+      // 处理订单完成后的逻辑，例如提示用户订单已完成
+    } else if (status === 'failed') {
+      console.log('订单处理失败!');
+      // 处理订单失败的逻辑
+    }
+  } catch (error) {
+    // 处理请求失败的情况
+  }
+}
+
+// 使用示例：
+checkOrderStatus('your-order-id');
+
+```
