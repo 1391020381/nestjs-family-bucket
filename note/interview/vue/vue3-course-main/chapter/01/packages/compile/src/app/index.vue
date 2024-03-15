@@ -1,17 +1,18 @@
 <template>
   <div class="v-counter">
-    <VText :text="num" />
     <button class="v-btn" @click="click">点击加1</button>
   </div>
 </template>
 
-<script setup>
-  import { ref } from 'vue';
-  import VText from './text.vue';
+<script setup lang="ts">
+  import { ref,onMounted } from 'vue';
   const num = ref(0);
   const click = () => {
     num.value += 1;
   }
+  onMounted(()=>{
+    console.log(123123123)
+  })
 </script>
 
 <style>

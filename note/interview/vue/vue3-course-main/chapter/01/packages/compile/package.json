@@ -9,6 +9,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "snabbdom": "^3.6.2",
     "vue": "^3.2.37"
   },
   "devDependencies": {
