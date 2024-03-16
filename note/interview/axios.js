@@ -1,6 +1,6 @@
-* axios 怎么取消请求
+// axios 怎么取消请求
 
-```
+
 
 // 创建一个 CancelToken 实例
 const CancelToken = axios.CancelToken;
@@ -20,8 +20,8 @@ axios.get('/your_api_url', {
 source.cancel('Operation canceled by the user.');
 
 
-Axios 的请求取消功能底层依赖于原生的 JavaScript 提供的 API：AbortController 。
-AbortController 是一个可以用来取消 fetch 请求的 API，以前使用 XMLHttpRequest 的时候，我们用的是 xhr.abort() 来取消请求，而现在使用 fetch，我们就可以用 AbortController 来取消了。Axios 也是基于此实现的取消功能。
+// Axios 的请求取消功能底层依赖于原生的 JavaScript 提供的 API：AbortController 。
+// AbortController 是一个可以用来取消 fetch 请求的 API，以前使用 XMLHttpRequest 的时候，我们用的是 xhr.abort() 来取消请求，而现在使用 fetch，我们就可以用 AbortController 来取消了。Axios 也是基于此实现的取消功能。
 // 创建一个 AbortController 实例
 const controller = new AbortController();
 
@@ -133,5 +133,3 @@ async function checkOrderStatus(orderId, delay = 2000) {
 
 // 使用示例：
 checkOrderStatus('your-order-id');
-
-```

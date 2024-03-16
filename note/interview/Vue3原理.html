@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue3原理</title>
+  </head>
+  <body>
+    <script>
+      // 1
+      let activeEffect = null;
+
+      function effect(fn) {
+        activeEffect = fn;
+        fn(); // 运行函数以获取依赖项
+        activeEffect = null;
+      }
+
+      let targetMap = new WeakMap();
+
+      function track(target, key) {
+        if (activeEffect) {
+          let depsMap = targetMap.get(target);
+          if (!depsMap) {
+            depsMap = new Map();
+            targetMap.set(target, depsMap);
+          }
+          let dep = depsMap.get(key);
+          if (!dep) {
+            dep = new Set();
+            depsMap.set(key, dep);
+          }
+          dep.add(activeEffect);
+        }
+      }
+
+      function trigger(target, key) {
+        const depsMap = targetMap.get(target);
+        if (depsMap) {
+          const dep = depsMap.get(key);
+          if (dep) {
+            dep.forEach((effect) => effect());
+          }
+        }
+      }
+
+      function reactive(target) {
+        const observers = new Map();
+        return new Proxy(target, {
+          get(target, key, receiver) {
+            const result = Reflect.get(target, key, receiver);
+            track(target, key); // 如果目标是依赖项，则跟踪它
+            if (activeEffect) {
+              observers.set(key, activeEffect);
+            }
+            return result;
+          },
+          set(target, key, value, receiver) {
+            const oldValue = target[key];
+            const result = Reflect.set(target, key, value, receiver);
+            if (oldValue != value) {
+              trigger(target, key); // 如果值已更改，请触发效果
+              const observer = observers.get(key);
+              if (observer) {
+                observer.dirty = true; // 当数据发生改变时, 将计算属性的dirty标识设为true
+              }
+            }
+            return result;
+          },
+        });
+      }
+
+      function ref(raw) {
+        return reactive({ value: raw });
+      }
+
+      let product = reactive({ price: 5, quantity: 2 });
+
+      let total = 0;
+
+      effect(() => {
+        total = product.price * product.quantity;
+      });
+
+      console.log(`total = ${total}`); // total = 10
+
+      product.quantity = 3;
+
+      console.log(`total = ${total}`); // total = 15
+
+      let discount = ref(0);
+
+      effect(() => {
+        console.log(`sale price = ${product.price * (1 - discount.value)}`);
+      }); // sale price = 5
+
+      discount.value = 0.2;
+
+      // 触发效果并打印 "sale price = 4"
+
+      // computer 实现原理
+
+      function computer(getter) {
+        let dirty = true;
+        let value = null;
+        return {
+          effect: effect(function computedEffect() {
+            if (dirty) {
+              value = getter();
+              dirty = false;
+            }
+          }),
+          get value() {
+            if (dirty) {
+              this.effect();
+            }
+            return value;
+          },
+        };
+      }
+
+      // nextTick 原理
+      let callbacks = [];
+      let pending = false;
+      function flushCallbacks() {
+        pending = false;
+        const copies = callbacks.slice(0);
+        callbacks.length = 0;
+        for (let i = 0; i < copies.length; i++) {
+          copies[i]();
+        }
+      }
+
+      let timerFunc;
+
+      if (typeof Promise !== "undefined" && isNative(Promise)) {
+        const p = Promise.resolve();
+        timerFunc = () => {
+          p.then(flushCallbacks);
+        };
+      } else if (
+        typeof MutationObserver !== "undefined" &&
+        (isNative(MutationObserver) ||
+          MutationObserver.toString() ===
+            "[object MutationObserverConstructor]")
+      ) {
+        let counter = 1;
+        const observer = new MutationObserver(flushCallbacks);
+        const textNode = document.createTextNode(String(counter));
+        observer.observe(textNode, {
+          characterData: true,
+        });
+        timerFunc = () => {
+          counter = (counter + 1) % 2;
+          textNode.data = String(counter);
+        };
+      } else {
+        timerFunc = setTimeout;
+      }
+
+      function nextTick(cb) {
+        let _resolve;
+        callbacks.push(() => {
+          if (cb) {
+            cb();
+          } else if (_resolve) {
+            _resolve();
+          }
+        });
+        if (!pending) {
+          pending = true;
+          timerFunc();
+        }
+      }
+      // 假设 多次改变数据 只会渲染一次
+      //  第一次 改变会被推入callback队列 pending =  true  timerFunc(); 包裹 callback
+      // 再此改变，由于是 宏任务 就会再次推入 callback 而 pending = true 不是执行 timerFunc
+
+      // keep-alive 原理
+    </script>
+
+    <script>
+      // 简单 Vue3 父子组件 vite编译
+
+      import {
+        createVNode as _createVNode,
+        openBlock as _openBlock,
+        createBlock as _createBlock,
+        createTextVNode as _createTextVNode,
+      } from "/assets/vendor.xxxxxxxx.js";
+      import { reactive, readonly } from "/assets/vendor.xxxxxxxx.js";
+      import ChildComponent from "/assets/ChildComponent.xxxxxxxx.js";
+
+      const _sfc_main = {
+        components: { ChildComponent },
+        setup() {
+          let title = reactive({ value: "Hello World!" });
+          return { title: readonly(title) };
+        },
+      };
+
+      function render(_ctx, _cache) {
+        return (
+          _openBlock(),
+          _createBlock("div", null, [
+            _createTextVNode(" " + _toDisplayString(_ctx.title.value) + " ", 1),
+            _createVNode(ChildComponent),
+          ])
+        );
+      }
+
+      import {
+        openBlock as _openBlock,
+        createBlock as _createBlock,
+        createTextVNode as _createTextVNode,
+      } from "/assets/vendor.xxxxxxxx.js";
+
+      const _sfc_main_child = {};
+
+      function render(_ctx, _cache) {
+        return (
+          _openBlock(),
+          _createBlock("p", null, " This is a child component. ", 1)
+        );
+      }
+    </script>
+  </body>
+</html>

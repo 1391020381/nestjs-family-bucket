@@ -5,7 +5,9 @@
 import { defineComponent,ref } from "vue";
 
 export default defineComponent({
-    setup(){
+    setup(props,context){
+        // 触发自定义事件
+        context.emit('customEvent',someValue);
         const count = ref(0);
         const increase = ()=>{
             count.value ++ 
