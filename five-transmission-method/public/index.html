@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>five-transmission-method</title>
+    <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/qs@6.10.2/dist/qs.js"></script>
+  </head>
+  <body>
+    five-transmission-method
+    <input id="fileInput" type="file" multiple />
+
+    <script>
+      async function urlParam() {
+        const res = await axios.get('/api/person/1');
+        console.log(res);
+      }
+      urlParam();
+    </script>
+    <script>
+      async function query() {
+        const res = await axios.get('/api/person/find', {
+          params: {
+            name: '光',
+            age: 20,
+          },
+        });
+        console.log(res);
+      }
+      query();
+    </script>
+    <script>
+      async function formUrlEncoded() {
+        const res = await axios.post(
+          '/api/person',
+          Qs.stringify({
+            name: '光',
+            age: 20,
+          }),
+          {
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          },
+        );
+        console.log(res);
+      }
+
+      formUrlEncoded();
+    </script>
+    <script>
+      async function json() {
+        const res = await axios.post('/api/person', {
+          name: '光',
+          age: 20,
+        });
+        console.log(res);
+      }
+      json();
+    </script>
+    <script>
+      const fileInput = document.querySelector('#fileInput');
+
+      async function formData() {
+        const data = new FormData();
+        data.set('name', '光');
+        data.set('age', 20);
+        data.set('file1', fileInput.files[0]);
+        data.set('file2', fileInput.files[1]);
+
+        const res = await axios.post('/api/person/file', data, {
+          headers: { 'content-type': 'multipart/form-data' },
+        });
+        console.log(res);
+      }
+
+      fileInput.onchange = formData;
+    </script>
+  </body>
+</html>
