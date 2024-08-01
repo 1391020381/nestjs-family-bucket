@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <input id="fileInput1" type="file" />
+    <script>
+      const fileInput1 = document.querySelector('#fileInput1');
+
+      async function formData() {
+        const data = new FormData();
+        data.set('name', '光');
+        data.set('age', 20);
+        data.set('aaa', fileInput1.files[0]);
+
+        const res = await axios.post('http://localhost:3002/aaa', data);
+        console.log(res);
+      }
+
+      fileInput1.onchange = formData;
+    </script>
+    <input id="fileInput2" type="file" multiple />
+    <script>
+      const fileInput2 = document.querySelector('#fileInput2');
+
+      async function formData2() {
+        const data = new FormData();
+        data.set('name', '光');
+        data.set('age', 20);
+        [...fileInput2.files].forEach((item) => {
+          data.append('bbb', item);
+        });
+
+        const res = await axios.post('http://localhost:3002/bbb', data);
+        console.log(res);
+      }
+
+      fileInput2.onchange = formData2;
+    </script>
+  </body>
+</html>
