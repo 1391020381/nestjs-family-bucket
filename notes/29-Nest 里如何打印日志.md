@@ -1,0 +1,3 @@
+- 日志打印可以用Nest的Logger，它支持创建应用的时候指定logger是否开启，打印的日志级别，还可以自定义logger
+- 自定义Logger需要实现LoggerService接口，或者继承ConsoleLogger然后重写部分方法。
+- 如果想在Logger注入一些provider 就需要创建应用时设置bufferLogs 为 true，然后用app.useLogger(app.get(xxxLogger))来指定Logger
