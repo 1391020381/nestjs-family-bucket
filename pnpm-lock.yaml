@@ -277,6 +277,9 @@ importers:
       class-validator:
         specifier: ^0.14.1
         version: 0.14.1
+      multer:
+        specifier: 1.4.5-lts.1
+        version: 1.4.5-lts.1
       reflect-metadata:
         specifier: ^0.2.0
         version: 0.2.2
@@ -299,6 +302,9 @@ importers:
       '@types/jest':
         specifier: ^29.5.2
         version: 29.5.12
+      '@types/multer':
+        specifier: ^1.4.11
+        version: 1.4.11
       '@types/node':
         specifier: ^20.3.1
         version: 20.14.6
