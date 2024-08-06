@@ -1,0 +1,24 @@
+- 它把系统的所有文件封装成一个镜像,镜像跑起来作为容器,它可以在一台机器上跑多个容器，每个容器都有独立的操作系统，比如文件操作系统 网络端口等,在容器内跑各种服务。
+- 这样整个环境都保存在这个镜像里，部署多个实例只要通过这个镜像跑多个容器就行。
+- Docker提供了Docker Hub镜像仓库，可以把本地镜像push到仓库或者从仓库pull镜像到本地。
+- docker build
+- docker pull
+- docker run name ports Volumes env
+- images 是本地镜像
+- containers 是镜像跑起来的容器
+- 我们都是把某个宿主机目录，挂载到容器的某个保存数据的目录,这样数据是保存在宿主机的，下次再用镜像跑一个新的容器，只要把这个目录挂载上去就行。
+- /usr/share/nginx/html
+- 如果你挂载某些目录报错，是因为docker desktop挂载的目录需要配置，在Settings > Resources > File Sharing 里加一行就行。
+- 至于挂载的目录，在镜像搜索结果页使用说明
+- docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+- docker run 来跑镜像 -v 是指定挂载的数据卷 后面的:ro 代表数据卷 readonly 也就是容器这个目录只读， :rw 表示容器内可以读写这个目录。
+- docker run --name nginx-test2 -p 80:80 -v /tmp/aaa:/usr/share/nginx/html -e KEY1=VALUE1 -d nginx:latest
+
+- docker ps 显示容器列表 默认是运行中的
+- docker ps -a 显示全部
+- docker images image镜像列表
+- docker destop 容器 terminal里执行命令 对应 docker exec命令
+- docker ecec -it id /bin/bash -i 是 terminal交互的方式运行 -t 是 tty终端类型
+- 查看日志 docker logs id
+- docker inspect 可以查看容器的详情 对应 desktop 里的 inspect tab
+- docker volume 可以管理数据卷
