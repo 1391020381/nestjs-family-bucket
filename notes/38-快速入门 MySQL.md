@@ -1,7 +1,8 @@
 - mysql 也是分为 后台守护进程和客户端两方面 cli-client gui-client
 - docker run --name hello-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v D:/Docker/mysql:/var/lib/mysql -d mysql:latest
+- docker run --name practice -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /Users/zhoujin/Volume/mysql:/var/lib/mysql -d mysql:latest
 
-* 绑定数据卷后 替换mysql版本 引擎会有问题。
+* 绑定数据卷后 替换 mysql 版本 引擎会有问题。
 
 - connection 连接 database schema
 - database 或 schema 下有 表 table 视图 view 存储过程 stored producer 函数 function
