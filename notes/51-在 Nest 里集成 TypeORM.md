@@ -40,3 +40,7 @@ await userRepository.save(user)
 - [查询项](https://www.typeorm.org/find-options)
 - [实体管理器API](https://www.typeorm.org/entity-manager-api)
 - [数据仓库API](https://www.typeorm.org/repository-api)
+
+* 现在通过 TypeOrm.forRoot来传入的数据源的配置，通过@InjectEntityManager来注入的 entityManager对象。缺点用每个API都要带上 Entity
+
+* Nest对这个做了封装，在user模块引入 TypeOrmModule.forFeature对应的动态模块,传入User的Entity nestjs官网
