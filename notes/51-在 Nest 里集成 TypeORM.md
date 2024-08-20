@@ -44,3 +44,14 @@ await userRepository.save(user)
 * 现在通过 TypeOrm.forRoot来传入的数据源的配置，通过@InjectEntityManager来注入的 entityManager对象。缺点用每个API都要带上 Entity
 
 * Nest对这个做了封装，在user模块引入 TypeOrmModule.forFeature对应的动态模块,传入User的Entity nestjs官网
+
+* 使用方式在根模块TypeOrmModule.forRoot传入数据配置。
+* 然后就可以在各处注入DataSrource EntityManager来增删改查了。 this.dataSource.getRespository()
+* 如果想用Repository来简化操作,还可以在用到模块引入TypeOrmModule.forFeature的动态模块,传入Entity，会返回对应的Reposity。
+* 这样就可以在模块内注入该Repository来用了。
+
+* 它的原理是TypeOrmModule.forRoot对应的动态模块是全局的，导出了dataSource entiryManager 所以才可以到处注入。
+* 而TypeOrmModule.forEature则会根据把传入的Entity对应的Repository导出,这样就可以在模块内注入了。
+* 这就是Nest里集成TypeOrm的方式和实现原理。
+
+* [TypeORM Integration](https://docs.nestjs.com/techniques/database#typeorm-integration)
