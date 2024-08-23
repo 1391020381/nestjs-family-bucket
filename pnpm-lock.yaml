@@ -1928,6 +1928,31 @@ importers:
         specifier: 4.5.2
         version: 4.5.2
 
+  typeorm-migration:
+    dependencies:
+      mysql:
+        specifier: ^2.14.1
+        version: 2.18.1
+      mysql2:
+        specifier: ^3.11.0
+        version: 3.11.0
+      reflect-metadata:
+        specifier: ^0.1.13
+        version: 0.1.14
+      typeorm:
+        specifier: 0.3.20
+        version: 0.3.20(mysql2@3.11.0)(ts-node@10.9.1(@types/node@16.18.105)(typescript@4.5.2))
+    devDependencies:
+      '@types/node':
+        specifier: ^16.11.10
+        version: 16.18.105
+      ts-node:
+        specifier: 10.9.1
+        version: 10.9.1(@types/node@16.18.105)(typescript@4.5.2)
+      typescript:
+        specifier: 4.5.2
+        version: 4.5.2
+
   version-test:
     dependencies:
       '@nestjs/common':
