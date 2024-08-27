@@ -40,3 +40,8 @@
 * geoadd loc 13.361389 38.115556 'guangguang' 15.087269 37.502669 'dongdong'
 * redis 实际使用 zset存储的, 把经纬度转化为了 二位平面的坐标。
 * geodist loc guangguang dongdong
+
+* 灵活运用数据结构，可以完成各种需求，比如排行榜用 zset 阅读数点赞数用 string 附近的人用geo等。
+* 这些key都可以设置过期时间 可以完成一些时效性相关的业务。
+
+* [面试官：Redis 的常见使用场景有哪些？](https://cloud.tencent.com/developer/article/1867518)
