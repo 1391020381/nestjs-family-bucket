@@ -1,5 +1,7 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
-
+// 在 MongoDB Atlas 中，默认提供的连接字符串（如 mongodb+srv://...）已经包含了副本集的所有节点信息
+// 并且 Atlas 会自动处理主节点切换和高可用性。你不需要手动指定副本集的每个节点地址
+// 因为 mongodb+srv 协议会自动解析 DNS 记录，获取副本集的所有节点信息。
 // 连接字符串
 const uri =
   "mongodb+srv://1391020381:171226q2@cluster0.w0jlk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
