@@ -1,0 +1,4 @@
+- 极客时间 mongodb 高手课
+- [geektime-mongodb-course](https://github.com/1391020381/geektime-mongodb-course)
+- [MongoDB 高手课-大致大纲](https://zyf.im/2023/04/19/mongodb-course/)
+- [mongodb-docs](https://www.mongodb.com/zh-cn/docs/manual/)
