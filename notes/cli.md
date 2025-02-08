@@ -1,0 +1,1 @@
+- npx @nestjs/cli new nestjs-docs
