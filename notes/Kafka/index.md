@@ -1,0 +1,8 @@
+- docker-compose up -d
+- Kafdrop http://localhost:9300
+  - 查看现有 Topic 如 test-topic
+  - 实时消费消息 (自动订阅最新消息)
+- Kafka Manager http://localhost:9000
+  - 创建/删除Topic
+  - 查看 Broker 状态 Topic分区分布
+  - 导出Topic 数据到本地文件

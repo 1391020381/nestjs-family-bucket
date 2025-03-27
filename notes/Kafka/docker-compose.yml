@@ -1,0 +1,69 @@
+# version: "3"
+services:
+  # ZooKeeper 服务
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-network
+
+  # Kafka Broker 服务
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092" # 移除 SSL 监听器
+      KAFKA_SSL_ENABLED: "false" # 显式禁用 SSL
+      KAFKA_SSL_KEYSTORE_LOCATION: "" # 空路径强制禁用 SSL
+      KAFKA_SSL_TRUSTSTORE_LOCATION: "" # 空路径强制禁用 SSL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 168
+    ports:
+      - "9092:9092"
+    volumes:
+      - D:/software/docker/kafka/kafka-data:/var/lib/kafka # 显式指定宿主机路径
+      - D:/software/docker/kafka/kafka-logs:/var/log/kafka
+    networks:
+      - kafka-network
+
+  # Kafdrop（轻量级 Web UI）
+  # kafdrop:
+  #   image: obsidiandynamics/kafdrop
+  #   environment:
+  #     KAFKA_BROKER_LIST: "kafka:9092" # 指向 Kafka Broker
+  #     KAFKA_OFFSETS_TOPIC: "__consumer_offsets" # 偏移量存储Topic
+  #     KAFDROP_BASE_URL: "/kafdrop" # 可选：自定义路径
+  #     DNS: host.docker.internal # 强制使用 Docker 内部 DNS
+  #   ports:
+  #     - "9300:9300" # 默认访问端口
+  #   depends_on:
+  #     - kafka
+  #   networks:
+  #     - kafka-network
+
+  # # Kafka Manager（高级管理工具）
+  # kafka-manager:
+  #   image: sheepkiller/kafka-manager
+  #   environment:
+  #     KAFKA_BROKER_LISTS: "kafka:9092" # 指向 Kafka Broker
+  #     KAFKA_MANAGER_ZK_HOSTS: "zookeeper:2181" # 指向 ZooKeeper
+  #     KAFKA_MANAGER_LISTENERS: "http://0.0.0.0:9000" # 监听地址
+  #     DNS: host.docker.internal # 强制使用 Docker 内部 DNS
+  #   ports:
+  #     - "9000:9000" # 默认访问端口
+  #   depends_on:
+  #     - kafka
+  #     - zookeeper
+  #   networks:
+  #     - kafka-network
+# 网络配置
+networks:
+  kafka-network:
+    driver: bridge
+    internal: true
