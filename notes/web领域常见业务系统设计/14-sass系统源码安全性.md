@@ -33,3 +33,5 @@ npx source-map-decoder bundle-3a2b1c.js.map 1:2345  #  解析行号
 -> 原始位置  src/utils/auth.js:58:12
 
 ```
+
+- pkg -> 二进制产物
