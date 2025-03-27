@@ -7,3 +7,7 @@
 - nginx + keepalive
 - mongodb 副本集
 - 日志 监控
+
+* 多节点部署
+  - Docker Swarm
+  - k8s
