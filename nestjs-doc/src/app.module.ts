@@ -6,8 +6,9 @@ import { ProviderModule } from './provider/provider.module';
 import { ModulesModule } from './modules/modules.module';
 import { MiddlewareModule } from './middleware/middleware.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { PipeModule } from './pipe/pipe.module';
 @Module({
-  imports: [ControllerModule, ProviderModule, ModulesModule, MiddlewareModule],
+  imports: [ControllerModule, ProviderModule, ModulesModule, MiddlewareModule, PipeModule],
   controllers: [AppController],
   providers: [AppService],
 })
