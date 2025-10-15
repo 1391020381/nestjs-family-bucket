@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  # === Config Server (1节点，生产推荐3节点副本集) ===
+  configsvr:
+    image: mongo:6
+    container_name: mongo-configsvr
+    command: mongod --configsvr --replSet configReplSet --port 27019
+    ports:
+      - "27019:27019"
+    volumes:
+      - configsvr_data:/data/db
+    networks:
+      - mongo_net
+
+  # === Shard1 Replica Set (1主2从，共3节点，组成一个Shard) ===
+  shard1-node1:
+    image: mongo:6
+    container_name: mongo-shard1-node1
+    command: mongod --shardsvr --replSet shard1ReplSet --port 27018
+    volumes:
+      - shard1_node1_data:/data/db
+    networks:
+      - mongo_net
+
+  shard1-node2:
+    image: mongo:6
+    container_name: mongo-shard1-node2
+    command: mongod --shardsvr --replSet shard1ReplSet --port 27018
+    volumes:
+      - shard1_node2_data:/data/db
+    networks:
+      - mongo_net
+
+  shard1-node3:
+    image: mongo:6
+    container_name: mongo-shard1-node3
+    command: mongod --shardsvr --replSet shard1ReplSet --port 27018
+    volumes:
+      - shard1_node3_data:/data/db
+    networks:
+      - mongo_net
+
+  # === Mongos Router (1个，客户端从此接入) ===
+  mongos:
+    image: mongo:6
+    container_name: mongo-mongos
+    command: mongos --configdb configReplSet:configsvr:27019 --port 27017
+    ports:
+      - "27017:27017" # 客户端就连接这里
+    depends_on:
+      - configsvr
+      - shard1-node1
+      - shard1-node2
+      - shard1-node3
+    networks:
+      - mongo_net
+
+volumes:
+  configsvr_data:
+  shard1_node1_data:
+  shard1_node2_data:
+  shard1_node3_data:
+
+networks:
+  mongo_net:
+    driver: bridge
