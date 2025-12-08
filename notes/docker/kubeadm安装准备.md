@@ -31,3 +31,7 @@
 - 管理员: 使用kubectl与集群交互
 - kubelet 在后台持续工作，确保容器按规范运行 作为系统服务开始运行
 - kubeadm 仅在集群维护(升级 添加节点)时使用
+
+* 版本兼容
+* 系统(Ubuntu) -> docker
+* 系统(Ubuntu) -> Kubernetes
