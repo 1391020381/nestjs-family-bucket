@@ -28,3 +28,10 @@ Deloyment -> IngressClass -> Ingress -> Service -> Pod
 
 * 命名空间
 * 系统监控
+
+# 常见的Service类型及公网获取方式
+
+Service 类型 公网 IP 来源 适用场景
+LoadBalancer 云厂商自动分配（如 AWS ELB、阿里云 SLB、GCP LB） 云环境（推荐）
+NodePort 使用任意节点的 IP + 高端口（如 30080） 本地/测试/裸金属
+ClusterIP ❌ 无公网，仅集群内访问 不可用于 Ingress 对外暴露
